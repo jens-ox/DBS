@@ -1,0 +1,74 @@
+\section{Einleitung}
+\label{sec:einleitung}
+
+\textbf{Motivation}
+\begin{items}
+  \item 50\% weniger Aufwand bei Anwendungsentwicklung mit DB
+  \item Ermöglicht neue Anwendungen, die ohne DB zu komplex wären
+  \item Ausfaktorisieren der Verwaltung großer Datenmengen
+  \item \underline{ohne Datenbanken}
+  \begin{items}
+    \item Daten in Dateien abgelegt, Zugriffsfunktionalität Teil der Anwendung
+    \item Redundanz (in Daten und Funktionalität)
+    \item Programme oft nicht \emph{atomar} (= Programm wird entweder ganz oder gar nicht ausgeführt) -- nur bei nicht fehlerfreien Systemen relevant
+    \item \emph{Transaktionen} (= Programm oder Kommandofolge) oft nicht \emph{isoliert} (= keine inkonsistenten Zwischenzustände sichtbar) -- nur bei mehreren Transaktionen, aber auch bei fehlerfreien Systemen relevant
+    \item Nebenläufigkeit (\emph{concurrency} -- paralleler Zugriff auf dieselben Daten) schwer umsetzbar
+    \item Anwendungsentwicklung abhängig von der physischen Repräsentation der Daten (z.B. Datenspeicherung als Tabelle: Reihenfolge Zeilen/Spalten muss bekannt sein)
+    \item Datenschutz (= kein unbefugter Zugriff) nicht gewährleistet
+    \item Datensicherheit (= kein Datenverlust, insb. bei Defekten) nicht gewährleistet
+   \end{items}
+\end{items}
+
+\textbf{Relationale Datenbanken}
+\begin{items}
+  \item auch \underline{RDBMS} (\emph{relational database management system})
+  \item \( \cong \) Menge von Tabellen
+  \item Relation = Menge von Tupeln = Tabelle
+\end{items}
+
+\textbf{RDBMS -- Terminologie}
+\begin{items}
+  \item \underline{Relationenschema}: \textbf{Fett} geschrieben
+  \item \underline{Relation}: Weitere Einträge der Tabelle
+  \item \underline{Tupel}: Eine Zeile der Tabelle
+  \item \underline{Attribut}: Spaltenüberschrift
+  \item \underline{Relationenname}: Name der Tabelle
+  \item \underline{DBS}: Datenbanksystem = DBMS + Datenbank(en)
+  \item \underline{Schlüssel}: Attribut, das nicht doppelt vergeben werden darf
+  \item \underline{Fremdschlüssel}: Attribut taucht in anderem Relationenschema als Schlüssel auf
+  \item \underline{Integritätsbedingungen}:
+  \begin{enumeration}
+    \item \textbf{lokal}: Schlüssel in Relationenschema
+    \item \textbf{global}: Fremdschlüssel in Datenbankschema
+  \end{enumeration}
+  \item \underline{DB-Schema}: = Menge der Relationsschemata + globale Integritätsbedingungen
+  \item \underline{Sicht} (\emph{view}): Häufig vorkommende Datenabfrage, kann mit Sichtnamen als "`virtuelle"' Tabelle gespeichert werden \\*
+  \begin{lstlisting}[language=sql]
+    create view CArtist as
+      select NAME, JAHR
+      from Kuenstler
+      where LAND == "Kanada"
+  \end{lstlisting}
+  \item Verwendung wie "`normale"' Relation:
+  \begin{lstlisting}[language=sql]
+    select * from CArtist where JAHR < 2000
+  \end{lstlisting}
+  \item Nutzung für Datenschutz: Unterschiedliche Benutzer sehen unterschiedlichen DB-Ausschnitt
+\end{items}
+
+\newpage
+
+\textbf{RDBMS -- Anfrageoperationen}
+\begin{items}
+  \item \underline{Selektion}: Zeilen (Tupel) wählen (\( \sigma_{\text{KID}=1012}(\text{Titel}) \))
+  \item \underline{Projektion}: Spalten (Attribute) wählen (\( \pi_{\text{KID, NAME}}(\text{Kuenstler}) \))
+  \item Beispiel komplexer Ausdruck: \( \pi_{\text{NAME}, \text{ART}}(\sigma_{\text{KID}=1012}(\text{Titel})) \)
+  \begin{figure}[H]\centering\label{SelektionProjektion}\includegraphics[width=0.33\textwidth]{SelektionProjektion}\end{figure}
+  \item Weitere Operationen: Verbund (\emph{join}), Vereinigung, Differenz, Durchschnitt, Umbenennung
+  \item Operationen beliebig kombinierbar (\( \leadsto \) Query-Algebra)
+\end{items}
+
+\textbf{RDBMS -- Andragenoptimierung}
+\begin{items}
+  \item Algebraische Ausdrücke äquivalent, Abfrage aber unterschiedlich komplex, z.B. \\* \( \sigma_{\text{Vorname} = \text{'Klemens'}}(\sigma_{\text{Wohnort} = \text{'KA'}}(SNUSER)) \) vs. \\* \( \sigma_{\text{Wohnort} = \text{'KA'}}(\sigma_{\text{Vorname} = \text{'Klemens'}}(SNUSER)) \)
+\end{items}
