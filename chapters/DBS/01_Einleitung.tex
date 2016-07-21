@@ -72,3 +72,52 @@
 \begin{items}
   \item Algebraische Ausdrücke äquivalent, Abfrage aber unterschiedlich komplex, z.B. \\* \( \sigma_{\text{Vorname} = \text{'Klemens'}}(\sigma_{\text{Wohnort} = \text{'KA'}}(SNUSER)) \) vs. \\* \( \sigma_{\text{Wohnort} = \text{'KA'}}(\sigma_{\text{Vorname} = \text{'Klemens'}}(SNUSER)) \)
 \end{items}
+
+\textbf{RDBMS -- Physische Datenunabhängigkeit}
+\begin{items}
+  \item Anfragen \underline{deklarativ}: Nutzer entscheidet nicht, wie Ergebnis ermittelt wird
+  \item Datenunabhängigkeit: DBMS stellt sicher:
+  \begin{enumeration}
+    \item stabile Anfragenfunktionalität bei physischer Darstellungsänderung
+    \item Anfrage funktinoiert bei unterschiedlichen Datenbanken (gleiches Schema, unterschiedliche Datenhäufigkeit)
+  \end{enumeration}
+  \item \( \leadsto \) erlaubt höhere Komplexität bei Anwendungsentwicklung
+\end{items}
+
+\textbf{RDBMS -- 3-Ebenen-Architektur}
+\begin{figure}[H]\centering\label{DreiEbenenSchema}\includegraphics[width=0.2\textwidth]{DreiEbenenSchema}\end{figure}
+\begin{items}
+  \item \underline{Konzeptionelles Schema}: Diskursbereich? Welche Entitäten interessant (bei Studierenden Noten interessant, Hobbies usw. nicht)?
+  \item \underline{Internes Schema}: physische Datenrepräsentation
+  \item \underline{Externe Schemata}: Unterschiedlicher Datenausschnitt für unterschiedliche Nutzer (Datenschutz, Übersichtlichkeit, organisatorische Gründe, Verstecken von Änderungen am konzeptionellen Schema)
+  \item \( \leadsto \) \textbf{Logische Datenunabhängigkeit}
+\end{items}
+
+\newpage
+
+\textbf{Datenbankprinzipien -- Coddsche Regeln}
+\begin{enumeration}
+  \item \underline{Integration}: Einheitliche, nichtredundante Datenverwaltung
+  \item \underline{Operationen}: Speichern, Suchen, Ändern
+  \item \underline{Katalog}: Zugriff auf Datenbankbeschreibungen im \underline{data directory}
+  \item \underline{Benutzersichten}
+  \item \underline{Integritätssicherung}: Korrektheit des DB-Inhalts
+  \item \underline{Datenschutz}: Ausschluss unauthorisierter Zugriffe
+  \item \underline{Transaktionen}: mehrere DB-Operationen als Funktionseinheit (= Atomarität)
+  \item \underline{Synchronisation}: parallele Transaktionen koordinieren (= Isolation)
+  \item \underline{Datensicherung}: Wiederherstellung von Daten nach Systemfehlern
+\end{enumeration}
+\begin{items}
+  \item Strengste bekannte Datenbankdefinition
+  \item Funktionale Anforderungen (nichtfunktional z.B.: Wie schnell/zuverlässig muss Dienst sein?)
+\end{items}
+
+\begin{fragen}
+  \begin{enumeration}
+    \item Was ist eine Sicht?
+    \item Was ist die relationale Algebra? Wozu braucht man sie?
+    \item Geben Sie Beispiele für Algebra-Ausdrücke an, die nicht identisch, aber äquivalent sind, an.
+    \item Was leistet der Anfragenoptimierer einer Datenbank?
+    \item Erklären Sie: Drei-Ebenen-Architektur, physische/logische Datenunabhängigkeit.
+  \end{enumeration}
+\end{fragen}
