@@ -1,0 +1,108 @@
+\section{Clustering und Ausreißer}
+\label{sec:clustering}
+
+\textbf{Räumliche Indexstrukturen -- Motivation}
+\begin{items}
+	\item Was ist die nächste Bar, die mein bevorzugtes Bier ausschenkt?
+	\item \underline{Bereichsanfrage}: Wie viele Restaurants gibt es im Stadtzentrum?
+	\item Ähnlichkeitssuche Bilder: Distanz im Merkmalsraum = Maß der Unähnlichkeit
+\end{items}
+
+\textbf{Index -- B+-tree}
+\begin{items}
+	\item = non-clustered primary B+-tree
+	\item Beispiel: Student(name, age, gpa, major), B+T für gpa \\* (kleiner=links, größer=rechts, (gpa,(x,y)))
+	\begin{figure}[H]\centering\label{BPTree}\includegraphics[width=0.33\textwidth]{BPTree}\end{figure}
+\end{items}
+
+\newpage
+
+\textbf{Index -- kd-tree}
+\begin{items}
+	\item B+T löst Bar-Problem nicht wirklich
+	\item kd-tree: Splitting für eine Dimension nach der anderen, dann wieder von vorne
+	\item Beispiel: Vier Split-Dimensionen
+\end{items}
+\begin{figure}[H]\centering\label{KDTree}\includegraphics[width=0.33\textwidth]{KDTree}\end{figure}
+
+\textbf{kd-tree -- k-NN}
+\begin{items}
+	\item k-NN (= \emph{k-next-neighbour}) := Abstand des \( k \)-nächsten Nachbarn
+	\item Notation: E[k-NN]
+	\item Es müssen nur ein paar Rechtecke inspiziert werden, um Resultat zu ermitteln
+	\item Implementierung: Priority Queue (Inhalt Datenobjekte/Baumknoten, sortiert nach Abstand zum Anfragepunkt)
+	\item Hier: Baum unbalanciert, Balancierung in Realität für mehrdimensionale Daten
+\end{items}
+
+\textbf{Outlier}
+\begin{items}
+	\item = Element des Datenbestands, das in bestimmter Hinsicht erheblich vom restlichen Datenbestand abweicht
+	\item Mögliche Definition: \\*
+		Objekt \( O \), das in Datenbestand \( T \) enthalten ist ist ein DB(\( p \), \( D \))-Outlier, wenn der Abstand von \( O \) zu mindestens \( p \) Prozent der Objekte in \( T \) größer ist als \( D \).
+	\item \underline{Beispiel}: \( O \) ist Outlier, wenn \( p=0.6 \), da dann mehr als \( 60\% \) der Datenobjekte außerhalb des Kreises liegen
+\end{items}
+\begin{figure}[H]\centering\label{Outlier}\includegraphics[width=0.2\textwidth]{Outlier}\end{figure}
+
+\textbf{Outlier -- Algorithmen}
+\begin{items}
+	\item \underline{Index-basiert}: k-NN für jeden Punkt. Stop, sobald k-NN<D
+	\item \underline{Clustering}: Liefert Outliner als Beiprodukt
+	\item \underline{Abstandsbasiert}
+	\item \underline{Dichtebasiert}
+\end{items}
+
+\newpage
+
+\textbf{Clustering -- Beispiel}
+\begin{items}
+	\item Gegeben: Große Kundendatenbank, enthält Eigenschaften und Käufe
+	\item Gesucht: Gruppen von Kunden mit ähnlichem Verhalten finden
+\end{items}
+
+\textbf{Clustering -- DBSCAN}
+\begin{items}
+	\item \underline{Dichte}: Anzahl Objekte pro Volumeneinheit
+	\item \underline{Dichtes Objekt}: mindestens \( x \) andere Objekte in Kugel um Objekt mit Radius \( \epsilon \) (A)
+	\item \underline{Dichte-erreichbares Objekt}: Objekt in \( \epsilon \)-Umgebung eines dichten Objekts, das selbst nicht dicht ist (= Clusterrand, B, C)
+	\item \underline{Rauschen} (\emph{Noise}): Objekte, die von keinem dichten Objekt erreicht werden können (N)
+\end{items}
+\begin{figure}[H]\centering\label{DBSCAN}\includegraphics[width=0.2\textwidth]{DBSCAN}\end{figure}
+
+\textbf{DBSCAN -- Eigenschaften}
+\begin{items}
+	\item \underline{Komplexität}: Lineare, wenn \( \epsilon \)-Umgebungen vorberechnet wurden (oder mit räumlichem Index in konstanter Zeit bestimmt werden können) \\* \( \leadsto \) mehrdimensionale Indexstruktur sehr sinnvoll
+	\item Rauschen liefert mögliche Outlier
+\end{items}
+
+\textbf{Hochdimensionale Datenräume -- Anomalien}
+\begin{items}
+	\item \underline{Sparsity}: Raum ist nur dünn mit Punkten besetzt
+	\item Hierarchische Datenstrukturen uneffektiv: bei sehr, sehr vielen Dimensionen ist Abstand zweier Datenobjekte fast gleich dem zweier anderer (unter schwachen Annahmen) \( \leadsto \) keine echten Outliner (Outliner-Algorithmen liefern mehr oder weniger zufälliges Objekt)
+	\item \( \leadsto \) nur erfolgsversprechende Teilräume nach Ausreißern absuchen
+	\item Interessante Cluster sind i.d.R. nicht Cluster in allen Dimensionen
+\end{items}
+
+\textbf{Outlier -- im Höherdimensionalen}
+\begin{items}
+	\item Outlier erscheinen als solche nur in Teilräumen
+	\item Manche Teilräume ausreißerfrei
+	\item Unterschiedlichdimensionale Teilräume enthalten Ausreißer
+	\item trivial vs. nichttrivial:
+	\begin{enumeration}
+		\item \textbf{trivial}: Objekt ist in Teilraum bereits Ausreißer
+		\item \textbf{nichttrivial}: Gegenteil
+	\end{enumeration}
+	\item \( \leadsto \) Maß für Teilraumrelevanz -- wie findet man relevante TR?
+\end{items}
+
+\textbf{Subspace Search}
+\begin{items}
+	\item Exponentiell viele Teilräume \( P(A) \)
+	\item Auswahl relevanter Teilräume \( RS \subset P(A) \)
+\end{items}
+
+\textbf{HiCS -- Prinzip}
+\begin{items}
+	\item Attribute korrelieren nicht \( \leadsto \) Outlier in diesem Raum tendenziell eher trivial
+	\item \underline{Idee}: Suche nach Verletzung statistischer Unabhängigkeit \\* (= \textbf{Kontrast})
+\end{items}
