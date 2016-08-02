@@ -157,12 +157,7 @@
 		\item Ist eine gegebene History serialisierbar/recoverable/cascadeless?
 		\item Haben zwei Konflikt-äquivalente Histories stets die gleichen Reads-from-Beziehungen?
 		\item Warum verwendet man in der Regel nicht den Serialisierbarkeitsgraphen, um Serialisierbarkeit sicherzustellen?
-		\item Bei Deadlocks wird in der Regel eine Transaktion zurückgesetzt. Kann es vorkommen, dass die gleiche Transaktion
-		\begin{enumeration}
-			\item mehrmals
-			\item beliebig oft
-		\end{enumeration}
-		zurückgesetzt wird? Wenn ja, was kann man jeweils dagegen tun?
+		\item Bei Deadlocks wird in der Regel eine Transaktion zurückgesetzt. Kann es vorkommen, dass die gleiche Transaktion mehrmals/beliebig oft zurückgesetzt wird? Wenn ja, was kann man jeweils dagegen tun?
 		\item Geben Sie ein Beispiel für eine serialisierbare Ausführung, bestehend aus drei Transaktionen, mit folgender Eigenschaft an: Die zeitliche Reihenfolge der Commits ist \( c_1 \) vor \( c_2 \) vor \( c_3 \), die der äquivalenten seriellen Ausführung jedoch \( c_3 \) vor \( c_2 \) vor \( c_1 \).
 		\item Um einen Deadlock aufzulösen muss eine der beteiligten Transaktionen zurückgesetzt werden. Welche Kriterien sind Ihres Erachtens nach sinnvoll, um diese Auswahl zu treffen?
 	\end{enumeration}
