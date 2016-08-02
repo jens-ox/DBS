@@ -1,0 +1,25 @@
+\section{Relationale Datenbanksprachen}
+\label{sec:sql}
+
+\textbf{Aggregatfunktionen}
+\begin{items}
+	\item Prinzip: Berechnung eines Werts aus Werten eines Attributs
+	\item \underline{Join (natural)}: Kartesisches Produkt zweier Relationen
+	\item Weitere in Standard SQL: count(), sum(), min(), max(), avg()
+\end{items}
+
+\textbf{SQL-Kern}
+\begin{items}
+	\item \underline{select} \\*
+		Projektionsliste, \\*
+		arithmetische Operationen und Aggregatfunktionen
+	\item \underline{from} \\*
+		zu verwendende Relationen, ggf. Umbenennungen
+	\item \underline{where} \\*
+		Selektions- und Verbundbedingungen \\*
+		geschachtelte Anfragen (wieder SFW-Block)
+	\item \underline{group by} \\*
+		Gruppierung für Aggregatfunktionen
+	\item \underline{having} \\*
+		Selektionsbedingungen an Gruppen
+\end{items}
