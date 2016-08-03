@@ -112,4 +112,73 @@
 	\item Liste von (Knoten, Zähler)-Paaren (eine Liste pro Version) \( \leadsto \) Erfassung der Zusammenhönge zwischen Versionen
 	\item Quorum-basierte Techniken \( \leadsto \) Inkonsistenzen vermeiden
 	\item vector clock-basierte Techniken \( \leadsto \) Inkonsistenzen erkennen und auflösen
+	\item Unterschiedliche Knoten können Schreiboperationen absetzen \\* \( \leadsto \) Differenzierung
+	\item Version 1 ist Vorgänger von Version 2, wenn jeder Zähler in List von V1 einen kleineren Wert hat als in der von V2
+	\item Update (put) muss festlegen, welche Version aktualisiert werden soll
+	\item Get gibt i.A. mehrere Versionen zurück
 \end{items}
+
+\newpage
+
+\textbf{Scale Independence}
+\begin{items}
+	\item Anfrage ist \emph{scale-independent}
+		\\*
+		\( \leadsto \) Laufzeitverhalten unabhängig von DB-Größe
+	\item Anfragenklassifikation nach Aufwand:
+	\begin{enumeration}
+		\item Klasse I (konstant):
+			\\*
+			z.B. ID-basierter Zugriff, \lstinline[language=sql]{LIMIT}-beschränkte Anfragen2
+		\item Klasse II (beschränkt):
+			\\*
+			Explizite Begrenzung liegt vor
+			\\*
+			Als Kardinalität im erweiterten DB-Schema darstellbar
+		\item Klasse III ((sub-)linear):
+			\\*
+			z.B. Ausgabe aller Kunden/Produkte
+		\item Klasse IV (superlinear):
+			\\*
+			z.B. Clustering-Algo, der Self-Join der zugrundeliegenden Relation ausführt
+	\end{enumeration}
+	\item \( \leadsto \) \textbf{PIQL} (\emph{performance insightful query language}) - Scale Independent durch Erweiterungen und Beschränkungen der Anfragesprache
+\end{items}
+
+\textbf{Ergebnisgröße}
+\begin{items}
+	\item Wie bestimmte Größe des Anfrageergebnisses garantieren?
+		\\*
+		\( \leadsto \) \lstinline[language=sql]{LIMIT}, Pagination, Berücksichtigung von Fremdschlüsselbeziehungen, Erweiterung DB-Schema um Kardinalitäten
+\end{items}
+
+\textbf{Physische Optimierung}
+\begin{items}
+	\item Zwei Arten von physischen Operatoren:
+	\begin{enumeration}
+		\item \emph{remote operator}: Zugriffe auf key-value store und elementare Verarbeitungsschritte
+		\item Client-seitige Operatoren für Query-Logik
+	\end{enumeration}
+	\item Remote Operator: Muss explizite Beschränkung der Größe des Zwischenergebnisses enthalten (i.A. \lstinline{stop}-Operator in Operator-Darstellung)
+	\item Remote-Operatoren:
+	\begin{enumeration}
+		\item \textbf{IndexScan}: Prädikat muss zusammenhängendem Ausschnitt des indexierten Wertebereichs entsprechen, ``Sort'' muss Sortierreihenfolge des Index sein
+		\item \textbf{IndexForeignKeyJoin}: Beschränkung durch Fremdschlüsseleigenschaft \( \leadsto \) kein logischer Stop-Operator, linker Teilausdruck enthält Fremdschlüssel
+		\item \textbf{SortedIndexJoin}: Bei Sortierung des Inputs nach Join Key lässt sich aus limit hint-Begrenzuung der Anzahl an Datenobjekten pro Schlüssel ableiten
+	\end{enumeration}
+\end{items}
+
+\textbf{SLO Compliance-Vorhersage}
+\begin{items}
+	\item SLO = \emph{serivce-level objectives}
+	\item Größenbeschränkung Zwischenergebnisse noch keine Garantie für insgesamt beschränkten Aufwand
+	\item Wenn anliegende Last sehr groß kann IndexScan-Ausführung beliebig lange dauern
+	\item Lookup über Zufallsverteilung (Parameter Tupelgröße, Anzahl erwarteter Tupel)
+\end{items}
+
+\begin{fragen}
+	\begin{enumeration}
+		\item Was für Möglichkeiten kennen Sie, den Join zu implementieren? Weche Komplexität haben sie?
+		\item Welche Möglichkeiten kennen Sie, den Aufwand, den eine Anfrage verursacht, zu reduzieren/begrenzen?
+	\end{enumeration}
+\end{fragen}
