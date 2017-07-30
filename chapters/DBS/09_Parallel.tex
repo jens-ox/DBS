@@ -1,11 +1,13 @@
 \section{Nebenläufigkeit, Transaktionen}
 \label{sec:parallel}
 
-\textbf{Transatkionen: ACID Eigenschaften}
+\textbf{Transaktion}
 \begin{items}
+	\item Partiell geordnete Folge von Lese- und Schreibzugriffen auf Datenobjekte
+	\item \underline{ACID Eigenschaften:}
 	\item Atomicity: Entweder alles oder gar nichts ausführen
 	\item Consistency: Integritätsbedingungen bleiben erhalten
-	\item Isolation: Nutzer soll denken, er wäre alleine
+	\item Isolation: Nutzer hat Eindruck, er wäre alleine
 	\item Durability: Änderungen sollen dauerhaft sein
 \end{items}
 
@@ -18,45 +20,37 @@
 		\\*
 		+ Konsistenz immer gewährleistet 
 		\\*
-		- extreme Wartezeiten
-	\item \underline{Nicht-serielle Ausführung}:
-		\\*
-		- Lost Updates
-		\\*
-		- inkonsistente Lesezugriffe
-		\\*
-		- Dirty Reads (Reads von nicht-übermittelten Updates)
-		\\*
-		- Phantome
+		$-$ extreme Wartezeiten, schlechte Ressourcenausnutzung
 \end{items}
 
-\textbf{Lost Update}
+\textbf{Unkontrollierte nicht-serielle Ausführung: Probleme}
 \begin{items}
-	\item Programm \( T_1 \) transferiert 300 EUR von Konto \( A \) nach Konto \( B \),
+	\item \textbf{Lost Update}\\
+		 Programm \( T_1 \) transferiert 300 EUR von Konto \( A \) nach \( B \),
 		\\*
 		Programm \( T_2 \) schreibt Konto \( A \) \( 3 \% \) Zinsen gut
 		\\*
 		\( \leadsto \) Zinsen aus \( S_5 \) von \( T_2 \) verloren, weil \( T_1 \) in \( S_6 \) überschreibt
-\end{items}
-\begin{figure}[H]\centering\label{Synchronisation}\includegraphics[width=0.2\textwidth]{Synchronisation}\end{figure}
 
-\textbf{Dirty Read}
-\begin{items}
-	\item = Commit, Abort
-	\item \( T_2 \) schreibt Zinsen git basierend auf einem Wert, der nicht zu einem konsistenten Zustand gehört, denn später erfolgt Abort von \( T_1 \)
-\end{items}
-\begin{figure}[H]\centering\label{DirtyRead}\includegraphics[width=0.2\textwidth]{DirtyRead}\end{figure}
+	\begin{figure}[H]\centering\label{Synchronisation}\includegraphics[width=0.2\textwidth]{Synchronisation}\end{figure}
+	
+	\item \textbf{Dirty Read}\\
+		Commit, Abort \\
+		\( T_2 \) schreibt Zinsen gut basierend auf einem Wert, der nicht zu einem konsistenten Zustand gehört, denn später erfolgt Abort von \( T_1 \)
 
-\textbf{Non-Repeatable Reads}
-\begin{items}
-	\item Programm liest Datenobjekt mehr als einmal und sieht Änderung durch anderes Programm
+	\begin{figure}[H]\centering\label{DirtyRead}\includegraphics[width=0.2\textwidth]{DirtyRead}\end{figure}
+	
+	\item \textbf{Non-Repeatable Reads}\\
+		 Programm liest Datenobjekt mehr als einmal und sieht dabei Änderung durch anderes Programm
+	\begin{figure}[H]\centering\label{NonRepeatableRead}\includegraphics[width=0.2\textwidth]{NonRepeatableRead}\end{figure}
+	
+	\item \textbf{Phantom}\\
+		Berechnung von Änderung auf veralteten Werten
 \end{items}
-\begin{figure}[H]\centering\label{NonRepeatableRead}\includegraphics[width=0.2\textwidth]{NonRepeatableRead}\end{figure}
 
-\textbf{Transaktionen}
+\textbf{Konflikt}
 \begin{items}
-	\item = Ausführung eines Programms, dass auf DB (lesend oder schreibend) zugreift
-	\item Zwei Operationen \( p, q \) konlfligieren
+	\item Zwei Operationen \( p, q \) konfligieren
 		\\*
 		\( \Leftrightarrow \) \( p,q \) greifen auf selbes Datenobjekt zu und \( p \) oder \( q \) ist Schreiboperation
 \end{items}
