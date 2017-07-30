@@ -3,7 +3,7 @@
 
 \textbf{Transaktion}
 \begin{items}
-	\item Partiell geordnete Folge von Lese- und Schreibzugriffen auf Datenobjekte
+	\item Partiell geordnete Folge von Lese- und Schreibzugriffen auf Datenobjekte (mit Commit oder Abort am Ende)
 	\item \underline{ACID Eigenschaften:}
 	\item Atomicity: Entweder alles oder gar nichts ausführen
 	\item Consistency: Integritätsbedingungen bleiben erhalten
@@ -53,41 +53,25 @@
 	\item Zwei Operationen \( p, q \) konfligieren
 		\\*
 		\( \Leftrightarrow \) \( p,q \) greifen auf selbes Datenobjekt zu und \( p \) oder \( q \) ist Schreiboperation
+	\item In einer Transaktion müssen konfligierende Operationen \textbf{geordnet sein} (andere nicht zwingend)
 \end{items}
 
 \textbf{Histories}
 \begin{items}
-	\item \underline{Vollständige Historie}: Menge von Transaktionen und Ausführungsordnung (nebenläufige Verzahnung)
+	\item \underline{Vollständige Historie}: Menge von Transaktionen und Ausführungsordnung (nebenläufige Verzahnung, Ordnung konfligierender Operationen zwischen Transaktionen)
 	\item \underline{Historie}: Präfix einer vollständigen Historie
 	\item \underline{Commited Projection} (\( C(H) \)): H nach Entfernen aller nicht-committeten Operationen
-	\item Korrektheit im Fehlerfall:
-	\begin{enumeration}
-		\item \( \alpha \) = ``History enthält <10 Operationen'': 
-			\\*
-			Erfüllt \( H \) \( \alpha \), dann auch Präfixe \( H', H'', \dots \)
-			\\*
-			\( \leadsto \) \( \alpha \) ist \textbf{prefix commit-closed}
-		\item \( \beta \) = ``Alle Operationen sind Leseoperationen'':
-			\\*
-			Erfüllt \( H \) \( \beta \), dann auch \( H', H'', \dots \)
-			\\*
-			\( \leadsto \) \( \beta \) ist prefix commit-closed
-		\item \( \gamma \) = ``History enthält mehr als 10 Operationen'':
-			\\*
-			\( H' \) muss \( \gamma \) nicht erfüllen \\*
-			\( \leadsto \) \( \gamma \) ist nicht prefix commit-closed
-	\end{enumeration}
-	\item Eine Eigenschaft von Histories ist prefix commit closed
+	\item Eine Eigenschaft von Histories ist \textbf{prefix commit closed}
 		\\*
 		\( \Leftrightarrow \) (\( H \) erfüllt Eigenschaft \( \Rightarrow C(H') \) erfüllt Eigenschaft)
 \end{items}
 
-\textbf{Konfliktäquivalenz}
+\textbf{Konfliktäquivalenz (CSR)}
 \begin{items}
 	\item \( H, H' \) (Konflikt-)Äquivalent, wenn
 	\begin{enumeration}
 		\item gleiche Transaktionen, gleiche Operationen
-		\item gleiche Ordnung konfligierender Operationen
+		\item gleiche Ordnung konfligierender Operationen (gleiche Konfliktrelation)
 	\end{enumeration}
 \end{items}
 
