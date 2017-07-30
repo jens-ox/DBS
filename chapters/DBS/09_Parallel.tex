@@ -1,12 +1,19 @@
 \section{Nebenläufigkeit, Transaktionen}
 \label{sec:parallel}
 
+\textbf{Transatkionen: ACID Eigenschaften}
+\begin{items}
+	\item Atomicity: Entweder alles oder gar nichts ausführen
+	\item Consistency: Integritätsbedingungen bleiben erhalten
+	\item Isolation: Nutzer soll denken, er wäre alleine
+	\item Durability: Änderungen sollen dauerhaft sein
+\end{items}
+
 \textbf{Synchronisation}
 \begin{items}
 	\item Viele Nutzer sollen Daten gleichzeitig lesen und schreiben können
 		\\*
 		\( \leadsto \) Konsistenz sicherstellen \( \leadsto \) \textbf{Synchronisationskomponente}
-	\item Nutzer soll denken, er wäre der einzige
 	\item \underline{Serielle Ausführung}: 
 		\\*
 		+ Konsistenz immer gewährleistet 
@@ -108,7 +115,7 @@
 
 \textbf{Rücksetzbarkeitsklassen}
 \begin{items}
-	\item \underline{Rücksetzbar (RC)}: Commit für $T_j$ erst erlaubt, wenn alle $T_i$, von denen $T_j$ liest, committed sind (Abort darf Semantik von bereits committeten Transaktionen nicht verändern).
+	\item \underline{Rücksetzbar (RC)}: Commit für $T_j$ erst erlaubt, wenn alle $T_i$ von denen $T_j$ liest, committed sind (Abort darf Semantik von bereits committeten Transaktionen nicht verändern).
 	\item \underline{Avoid cascading aborts (ACA)}: Nur Objekte von bereits committeten Transaktionen lesen.
 	\item \underline{Striktheit (ST)}: Objekte von noch nicht committeten Transaktionen dürfen weder gelesen noch überschrieben werden (ermöglicht einfache Implementierung des Rücksetzens)
 \end{items}
