@@ -82,11 +82,12 @@
 		\\*
 		Knoten = Transaktionen
 		\\*
-		(gerichtete) Kante = Abhängigkeit zwischen Transaktionen: Transaktionen greifen auf selbes Datenobjekt zu \( \leadsto \) Operationen konfligieren
-	\item Theorem: Schedule ist serialisierbar, wenn entsprechender Abhängigkeitsgraph zykelfrei ist
+		(gerichtete) Kante von $T_1$ nach $T_2$ wenn $op_1$ und $op_2$ konfligieren und $op_1 < op_2$
+	\item \textbf{Theorem}: Schedule ist serialisierbar, wenn entsprechender Abhängigkeitsgraph zykelfrei ist
+	\item Konflikt-Serialisierbarkeit ist prefix commit-closed
 	\item \textbf{Ansatz nicht praktikabel}:
 	\begin{enumeration}
-		\item Serialisierbarkeit von Schedules nur im Nachhinein überprüfbar
+		\item Serialisierbarkeit nur im Nachhinein überprüfbar
 		\item Administrativer Overhead zu hoch: Abhängigkeiten zu bereits terminierten Transaktionen berücksichtigen
 	\end{enumeration}
 \end{items}
@@ -102,42 +103,34 @@
 \begin{items}
 	\item Lock für jedes Datenobjekt und jede Operationsart
 		\\*
-		Notation: \( ol_i[x] \)
-	\item Einfachster Fall: Nur Read/Write Locks
-		\\*
-		\( \leadsto \) \emph{rx locking scheme}
-	\item \underline{Zwei-Phasen-Sperrprotokoll}:
+		Notation: \( rl_i[x] \), \( wl_i[x] \)
+	\item Aber: Sperrdisziplin alleine reicht für Korrektheit nicht aus!
+	
+	\item \textbf{Zwei-Phasen-Sperrprotokoll (2PL)}:
 	\begin{enumeration}
 		\item Locks werden hinzugenommen
 		\item Locks werden freigegeben
 	\end{enumeration}
-	\( \leadsto \) stellt Serialisierbarkeit sicher
-\end{items}
-
-\textbf{Deadlock}
-\begin{items}
-	\item \( T_1: r_1[x] \to w_1[y] \to c_1, T_2: w_2[y] \to w_2[x] \to c_2 \)
-	\begin{enumeration}
-		\item Beide Transaktionen zuerst keine Locks
-		\item TM sendet \( r_1[x] \) an Scheduler
-			\\*
-			\( \leadsto rl_1[x] \), Scheduler sendet \( r_1[x] \) an DM
-		\item TM sendet \( w_2[y] \) ab Scheduler
-			\\*
-			\( \leadsto wl_2[y] \), Scheduler sendet \( w_2[y] \) an DM
-		\item TM sendet \( w_2[x] \) an Scheduler
-			\\*
-			\( \leadsto wl_2[x] \) nicht möglich \( \leadsto \) Verzögerung
-		\item TM sendet \( w_1[y] \) an Scheduler
-			\\*
-			\( \leadsto wl_1[y] \) nicht möglich \( \leadsto \) Verzögerung
-	\end{enumeration}
-	\( \leadsto \) \textbf{Deadlock}
-\end{items}
-
-\textbf{Strenges 2-Phasen-Sperrprotokoll}
-\begin{items}
-	\item Freigabe der Locks erst nach Transaktionsende
+	\( \leadsto \) Serialisierbarkeit sichergestellt\\
+						Deadlocks sowie kaskadierende Abbrüche weiterhin möglich
+	
+	\item \textbf{Strenges Zwei-Phasen-Sperrprotokoll (S2PL)}: 
+	
+	Atomare Freigabephase am Ende der Transaktion\\
+	\( \leadsto \) Zusätzlich ACA: Vermeidung kaskadierender Abbrüche
+	
+	\item \textbf{Konservatives Zwei-Phasen-Sperrprotokoll (C2PL)}:
+	
+	Atomare Anforderungsphase zu Beginn der Transaktion\\
+	\( \leadsto \) Zusätzlich: Vermeidet Deadlocks
+	
+	\item \textbf{CS2PL}: 
+	
+	Kombination aus streng und konservativ: Atomare Anforderungs- und atomare Freigabephase \\
+	\( \leadsto \) Serialisierbarkeit, ACA, Deadlockfreiheit
+	
+	\item \textbf{Aber:} Jede Einschränkung schränkt auch die Zahl der möglichen Histories ein und verringert damit den möglichen Grad der Parallelität!
+	
 \end{items}
 
 \begin{fragen}
