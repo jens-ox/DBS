@@ -9,21 +9,29 @@
 \end{items}
 \begin{figure}[H]\centering\label{EntityRelationship}\includegraphics[width=0.33\textwidth]{EntityRelationship}\end{figure}
 
+\textbf{Attribute}
+\begin{items}
+	\item \underline{Mengenwertig:} Durch Doppelrand gekennzeichnet
+	\item \underline{Optional:}
+	\begin{figure}[H]\centering\label{OptionaleAttribute}\includegraphics[width=0.33\textwidth]{OptionaleAttribute}\end{figure}
+\end{items}
+
 \textbf{ER -- Modellierungskonzepte}
 \begin{items}
 	\item \( \mu(D) \): Interpretation von \( D \), mögliche Werte einer Entity-Eig.
-	\item \( \mu \)(\lstinline[language=sql]{int}): Wertebereich \( \mathbb{Z} \)
-	\item \( \mu \)(\lstinline[language=sql]{string}): Wertebereich \( C^\star \) (Folgen von Zeichen aus \( C \))
+	\item \( \mu \)(\lstinline[language=sql]{int}): \( \mathbb{Z} \),  \( \mu \)(\lstinline[language=sql]{string}): \( C^\star \) (Folgen von Zeichen aus \( C \))
 	\item \( \mu(E) \): Menge der möglichen Entities vom Typ \( E \)
-	\item \( \sigma_i \)(E): Menge der \emph{aktuellen} Entities vom Typ \( E \) in Zustand \( \sigma_i \) (Index \( i \) weglassen, wenn eindeutig)
-	\begin{enumeration}
-		\item \( \sigma(E) \subseteq \mu(E) \)
-		\item \( \sigma(E) \) endlich
-	\end{enumeration}
+	\item \( \sigma_i \)(E): Menge der \emph{aktuellen} Entities vom Typ \( E \) in Zustand \( \sigma\)
+	\\* \( \leadsto \) \( \sigma(E) \subseteq \mu(E) \) und \( \sigma(E) \) endlich
 	\item \( \mu(R) = \mu(E_1) \times \cdots \times \mu(E_n) \) \\* \( \leadsto \) Die Menge aller möglichen Ehen ist die Menge aller (Mann,Frau)-Paare.
 	\item \( \sigma(R) \subseteq \sigma(E_1) \times \cdots \times \sigma(E_n) \) \\* \( \leadsto \) aktuelle Beziehungen nur zwischen aktuellen Entities
 	\item Attribut \( A \) eines Entity-Typen \( E \) ist im Zustand \( \sigma \) eine Abbildung \( \sigma(A): \sigma(E) \to \mu(D) \) (\underline{nicht} \( A: \sigma(E) \to \mu(D) \))
 	\item Beziehungsattribute: \( \sigma(A): \sigma(R) \to \mu(D) \) (Beziehung \( R \), Attribut \( A \), möglicher Wertebereich \( \mu(D) \))
+\end{items}
+
+\textbf{Mehrstellige Beziehungen}
+\begin{items}
+	\item Umwandlung von mehrstelligen Beziehungen in mehrere einstellige Beziehungen i.A. nicht einfach möglich.
 \end{items}
 
 \textbf{Funktionale Beziehungen}
@@ -33,6 +41,8 @@
 \end{items}
 \begin{figure}[H]\centering\label{FunktionaleBeziehung}\includegraphics[width=0.33\textwidth]{FunktionaleBeziehung}\end{figure}
 
+\newpage
+
 \textbf{Schlüssel}
 \begin{items}
 	\item Schlüsselattribute \( \{ S_1, \dots, S_k \} \subseteq \{ A_1, \dots, A_m \} \) für \\* Entity-Typ \( E(A_1, \dots, A_m) \)
@@ -40,17 +50,17 @@
 	\item Schlüssel ist minimal: Wird ein Schlüsselattribut entfernt, so ist das entstehende Tupel nicht mehr eindeutig
 \end{items}
 
-\newpage
-
 \textbf{Abhängige Entity-Typen}
 \begin{items}
-	\item Identifikation: Funktionale Beziehung
+	\item Identifikation über funktionale Beziehung (als Schlüssel)\\
+	Bsp: (Exemplar-)Nummer bezieht sich auf jeweiliges Buch
 \end{items}
 \begin{figure}[H]\centering\label{AbhaengigeEntity}\includegraphics[width=0.33\textwidth]{AbhaengigeEntity}\end{figure}
 
 \textbf{IST-Beziehung}
 \begin{figure}[H]\centering\label{ISTBeziehung}\includegraphics[width=0.33\textwidth]{ISTBeziehung}\end{figure}
 \begin{items}
+	\item Spezialfall eines abhängigen Entity-Typen (nur Beziehung als Schlüssel)
 	\item Vererbung von Attributen (und Werten): \\* \( \sigma(\text{Prüfer}) \subseteq \sigma(\text{Mitarbeiter}) \)
 \end{items}
 \begin{figure}[H]\centering\label{MehrereFaecher}\includegraphics[width=0.33\textwidth]{MehrereFaecher}\end{figure}
@@ -60,16 +70,17 @@
 	\item An wv. Beziehungen muss Entity teilnehmen? \( \leadsto \) einschränken
 	\item \underline{Teilnehmerkardinalität}: \lstinline[language=sql]{arbeitet_in(Mitarbeiter[0,1],Raum[0,3])}
 	\begin{enumeration}
-	 	\item jeder Mitarbeiter hat einen zugeordneten Raum, aber einige Mitarbeiter haben kein Arbeitszimmer
+	 	\item jeder Mitarbeiter hat einen oder keinen zugeordneten Raum
 	 	\item pro Zimmer arbeiten maximal drei Mitarbeiter
 	 	\item ein Zimmer kann leerstehen
 	 \end{enumeration} 
-	 \item \underline{Standardkardinalität}: 1 Mannschaft steht mit 11 Spielern in Bezug \\* speziell: \lstinline[language=sql]{m:n}/\lstinline[language=sql]{1:n}/\lstinline[language=sql]{1:1}-Beziehung
+	 \item \underline{Standardkardinalität}: 1 Mannschaft steht mit 11 Spielern in Bezug \\*
+	 Auch hier Intervallangabe möglich\\*
+	  Speziell: \lstinline[language=sql]{m:n}/\lstinline[language=sql]{1:n}/\lstinline[language=sql]{1:1}-Beziehung (Untere Schranke jeweils \textbf{0})
 	 \begin{figure}[H]\centering\label{Mannschaft}\includegraphics[width=0.33\textwidth]{Mannschaft}\end{figure}
 \end{items}
 
-\textbf{Optionale Attribute}
-\begin{figure}[H]\centering\label{OptionaleAttribute}\includegraphics[width=0.33\textwidth]{OptionaleAttribute}\end{figure}
+
 
 \newpage
 
