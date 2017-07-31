@@ -86,9 +86,10 @@
 
 \textbf{Semantische Beziehungen}
 \begin{items}
-	\item \underline{Spezialisierung}: \lstinline[language=sql]{Pruefer} Spezialisierung von \lstinline[language=sql]{Mitarbeiter} \\* \( \leadsto \) Vererbung
+	\item \underline{Spezialisierung}: \lstinline[language=sql]{Pruefer} Spezialisierung von \lstinline[language=sql]{Mitarbeiter} \\* \( \leadsto \) Vererbung (IST-Beziehung)
 	\item \underline{Partitionierung}: Spezialfall der Spezialisierung, mehrere \emph{disjunkte} Entity-Typen (z.B. Partitionierung von Buch in Monographie und Sammelband)
-	\item \underline{Generalisierung}: \lstinline[language=sql]{Medium} ist stets \lstinline[language=sql]{DVD} oder \lstinline[language=sql]{Buch} \\* Abstrakte Klasse \lstinline[language=sql]{Medium}
+	\item \underline{Generalisierung}: Buch oder DVD als Medium \\*
+	\lstinline[language=sql]{Medium} ist stets \lstinline[language=sql]{DVD} oder \lstinline[language=sql]{Buch} \\* Aber: Buch muss kein Medium sein.
 	\item \underline{Aggregierung}: \lstinline[language=sql]{Auto} besteht aus \lstinline[language=sql]{Motor}, \lstinline[language=sql]{Karosserie},... \\* \( \leadsto \) Entity aus Instanzen anderer Entity-Typen zusammengesetzt
 	\item \underline{Sammlung} (auch Assoziation): \lstinline[language=sql]{Team} ist Gruppe von \lstinline[language=sql]{Person} \\* \( \leadsto \) Mengenbildung
 \end{items}
@@ -96,13 +97,13 @@
 \textbf{EER}
 \begin{items}
 	\item = Erweitertes ER-Modell
-	\item Übernommen: Werte, Entities, Beziehungen, Attribute, Funktionale Beziehungen, Schlüssel
+	\item Übernommen: Werte, Entities, Beziehungen, Attribute, Funktionale Beziehungen, Schlüssel (jetzt ausgefüllter Kreis)
 	\item Nicht übernommen: IST-Beziehung -- ersetzt durch \emph{Typkonstruktor}
 \end{items}
 
 \textbf{EER -- Typkonstruktor}
 \begin{items}
-	\item Ersetzt Spezialisierung, Generalisierung, Partitionierung
+	\item Ermöglicht Spezialisierung, Generalisierung, Partitionierung
 	\item Eingabetypen mit Dreiecksbasis verbunden (bei Generalisierung spezielle Typen, bei Spezialisierung/Partitionierung allgemeine Typen)
 	\item Ausgabetypen mit Spitze verbunden
 \end{items}
