@@ -23,12 +23,11 @@
 \begin{items}
 	\item ``Wenn ab Zeitpunkt keine Änderungen mehr, dann werden irgendwann alle Lesezugriffe gleichen Wert zurückliefern''
 	\item Alternativ: ``\dots dann werden irgendwann alle Lesezugriffe zuletzt geschriebenen Wert zurückliefern''
-	\item Beispiel (social network):
-	\begin{enumeration}
-		\item User schreibt Post
-		\item Vorübergehend keine Postings möglich
-		\item Rückmeldung, sobald alle relevanten Partitionen erreicht
-	\end{enumeration}
+	\item Beispiel (social network): Netzwerkpartition
+	\begin{items}
+		\item Starke Konsistenz: Vorübergehend keine Postings möglich
+		\item Eventual Consistency: User kann Posting schreiben, Follower sehen es sobald möglich
+	\end{items}
 \end{items}
 
 \begin{fragen}

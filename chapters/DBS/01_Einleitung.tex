@@ -68,9 +68,9 @@
   \item Operationen beliebig kombinierbar (\( \leadsto \) Query-Algebra)
 \end{items}
 
-\textbf{RDBMS -- Andragenoptimierung}
+\textbf{RDBMS -- Anfragenoptimierung}
 \begin{items}
-  \item Algebraische Ausdrücke äquivalent, Abfrage aber unterschiedlich komplex, z.B. \\* \( \sigma_{\text{Vorname} = \text{'Klemens'}}(\sigma_{\text{Wohnort} = \text{'KA'}}(SNUSER)) \) vs. \\* \( \sigma_{\text{Wohnort} = \text{'KA'}}(\sigma_{\text{Vorname} = \text{'Klemens'}}(SNUSER)) \)
+  \item Algebraische Ausdrücke äquivalent, Anfrage aber unterschiedlich komplex, z.B. \\* \( \sigma_{\text{Vorname} = \text{'Klemens'}}(\sigma_{\text{Wohnort} = \text{'KA'}}(SNUSER)) \) vs. \\* \( \sigma_{\text{Wohnort} = \text{'KA'}}(\sigma_{\text{Vorname} = \text{'Klemens'}}(SNUSER)) \)
 \end{items}
 
 \textbf{RDBMS -- Physische Datenunabhängigkeit}
@@ -99,7 +99,7 @@
 \begin{enumeration}
   \item \underline{Integration}: Einheitliche, nichtredundante Datenverwaltung
   \item \underline{Operationen}: Speichern, Suchen, Ändern
-  \item \underline{Katalog}: Zugriff auf Datenbankbeschreibungen im \underline{data directory}
+  \item \underline{Katalog}: Zugriff auf Datenbankbeschreibungen im data directory
   \item \underline{Benutzersichten}
   \item \underline{Integritätssicherung}: Korrektheit des DB-Inhalts
   \item \underline{Datenschutz}: Ausschluss unauthorisierter Zugriffe
@@ -109,7 +109,7 @@
 \end{enumeration}
 \begin{items}
   \item Strengste bekannte Datenbankdefinition
-  \item Funktionale Anforderungen (nichtfunktional z.B.: Wie schnell/zuverlässig muss Dienst sein?)
+  \item Funktionale Anforderungen (nichtfunktional z.B.: Wie schnell/zuverlässig muss Dienst sein, kurze Antwortzeiten, Zuverlässigkeit, Effizienz, Skalierbarkeit)
 \end{items}
 
 \begin{fragen}

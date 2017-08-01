@@ -1,92 +1,77 @@
 \section{Nebenläufigkeit, Transaktionen}
 \label{sec:parallel}
 
+\textbf{Transaktion}
+\begin{items}
+	\item Partiell geordnete Folge von Lese- und Schreibzugriffen auf Datenobjekte (mit Commit oder Abort am Ende)
+	\item \underline{ACID Eigenschaften:}
+	\item Atomicity: Entweder alles oder gar nichts ausführen
+	\item Consistency: Integritätsbedingungen bleiben erhalten
+	\item Isolation: Nutzer hat Eindruck, er wäre alleine
+	\item Durability: Änderungen sollen dauerhaft sein
+\end{items}
+
 \textbf{Synchronisation}
 \begin{items}
 	\item Viele Nutzer sollen Daten gleichzeitig lesen und schreiben können
 		\\*
 		\( \leadsto \) Konsistenz sicherstellen \( \leadsto \) \textbf{Synchronisationskomponente}
-	\item Nutzer soll denken, er wäre der einzige
 	\item \underline{Serielle Ausführung}: 
 		\\*
 		+ Konsistenz immer gewährleistet 
 		\\*
-		- extreme Wartezeiten
-	\item \underline{Nicht-serielle Ausführung}:
-		\\*
-		- Lost Updates
-		\\*
-		- inkonsistente Lesezugriffe
-		\\*
-		- Dirty Reads (Reads von nicht-übermittelten Updates)
-		\\*
-		- Phantome
+		$-$ extreme Wartezeiten, schlechte Ressourcenausnutzung
 \end{items}
 
-\textbf{Lost Update}
+\textbf{Unkontrollierte nicht-serielle Ausführung: Probleme}
 \begin{items}
-	\item Programm \( T_1 \) transferiert 300 EUR von Konto \( A \) nach Konto \( B \),
+	\item \textbf{Lost Update}\\
+		 Programm \( T_1 \) transferiert 300 EUR von Konto \( A \) nach \( B \),
 		\\*
 		Programm \( T_2 \) schreibt Konto \( A \) \( 3 \% \) Zinsen gut
 		\\*
 		\( \leadsto \) Zinsen aus \( S_5 \) von \( T_2 \) verloren, weil \( T_1 \) in \( S_6 \) überschreibt
-\end{items}
-\begin{figure}[H]\centering\label{Synchronisation}\includegraphics[width=0.2\textwidth]{Synchronisation}\end{figure}
 
-\textbf{Dirty Read}
-\begin{items}
-	\item = Commit, Abort
-	\item \( T_2 \) schreibt Zinsen git basierend auf einem Wert, der nicht zu einem konsistenten Zustand gehört, denn später erfolgt Abort von \( T_1 \)
-\end{items}
-\begin{figure}[H]\centering\label{DirtyRead}\includegraphics[width=0.2\textwidth]{DirtyRead}\end{figure}
+	\begin{figure}[H]\centering\label{Synchronisation}\includegraphics[width=0.2\textwidth]{Synchronisation}\end{figure}
+	
+	\item \textbf{Dirty Read}\\
+		Commit, Abort \\
+		\( T_2 \) schreibt Zinsen gut basierend auf einem Wert, der nicht zu einem konsistenten Zustand gehört, denn später erfolgt Abort von \( T_1 \)
 
-\textbf{Non-Repeatable Reads}
-\begin{items}
-	\item Programm liest Datenobjekt mehr als einmal und sieht Änderung durch anderes Programm
+	\begin{figure}[H]\centering\label{DirtyRead}\includegraphics[width=0.2\textwidth]{DirtyRead}\end{figure}
+	
+	\item \textbf{Non-Repeatable Reads}\\
+		 Programm liest Datenobjekt mehr als einmal und sieht dabei Änderung durch anderes Programm
+	\begin{figure}[H]\centering\label{NonRepeatableRead}\includegraphics[width=0.2\textwidth]{NonRepeatableRead}\end{figure}
+	
+	\item \textbf{Phantom}\\
+		Berechnung von Änderung auf veralteten Werten
 \end{items}
-\begin{figure}[H]\centering\label{NonRepeatableRead}\includegraphics[width=0.2\textwidth]{NonRepeatableRead}\end{figure}
 
-\textbf{Transaktionen}
+\textbf{Konflikt}
 \begin{items}
-	\item = Ausführung eines Programms, dass auf DB (lesend oder schreibend) zugreift
-	\item Zwei Operationen \( p, q \) konlfligieren
+	\item Zwei Operationen \( p, q \) konfligieren
 		\\*
 		\( \Leftrightarrow \) \( p,q \) greifen auf selbes Datenobjekt zu und \( p \) oder \( q \) ist Schreiboperation
+	\item In einer Transaktion müssen konfligierende Operationen \textbf{geordnet sein} (andere nicht zwingend)
 \end{items}
 
 \textbf{Histories}
 \begin{items}
-	\item \underline{Vollständige Historie}: Menge von Transaktionen und Ausführungsordnung (nebenläufige Verzahnung)
+	\item \underline{Vollständige Historie}: Menge von Transaktionen und Ausführungsordnung (nebenläufige Verzahnung, Ordnung konfligierender Operationen zwischen Transaktionen)
 	\item \underline{Historie}: Präfix einer vollständigen Historie
 	\item \underline{Commited Projection} (\( C(H) \)): H nach Entfernen aller nicht-committeten Operationen
-	\item Korrektheit im Fehlerfall:
-	\begin{enumeration}
-		\item \( \alpha \) = ``History enthält <10 Operationen'': 
-			\\*
-			Erfüllt \( H \) \( \alpha \), dann auch Präfixe \( H', H'', \dots \)
-			\\*
-			\( \leadsto \) \( \alpha \) ist \textbf{prefix commit-closed}
-		\item \( \beta \) = ``Alle Operationen sind Leseoperationen'':
-			\\*
-			Erfüllt \( H \) \( \beta \), dann auch \( H', H'', \dots \)
-			\\*
-			\( \leadsto \) \( \beta \) ist prefix commit-closed
-		\item \( \gamma \) = ``History enthält mehr als 10 Operationen'':
-			\\*
-			\( H' \) muss \( \gamma \) nicht erfüllen \\*
-			\( \leadsto \) \( \gamma \) ist nicht prefix commit-closed
-	\end{enumeration}
-	\item Eine Eigenschaft von Histories ist prefix commit closed
+	\item Eine Eigenschaft von Histories ist \textbf{prefix commit closed}
 		\\*
 		\( \Leftrightarrow \) (\( H \) erfüllt Eigenschaft \( \Rightarrow C(H') \) erfüllt Eigenschaft)
 \end{items}
 
-\textbf{Konfliktäquivalenz}
+\textbf{Konfliktäquivalenz (CSR)}
 \begin{items}
 	\item \( H, H' \) (Konflikt-)Äquivalent, wenn
 	\begin{enumeration}
 		\item gleiche Transaktionen, gleiche Operationen
-		\item gleiche Ordnung konfligierender Operationen
+		\item gleiche Ordnung konfligierender Operationen (gleiche Konfliktrelation)
 	\end{enumeration}
 \end{items}
 
@@ -97,55 +82,55 @@
 		\\*
 		Knoten = Transaktionen
 		\\*
-		(gerichtete) Kante = Abhängigkeit zwischen Transaktionen: Transaktionen greifen auf selbes Datenobjekt zu \( \leadsto \) Operationen konfligieren
-	\item Theorem: Schedule ist serialisierbar, wenn entsprechender Abhängigkeitsgraph zykelfrei ist
+		(gerichtete) Kante von $T_1$ nach $T_2$ wenn $op_1$ und $op_2$ konfligieren und $op_1 < op_2$
+	\item \textbf{Theorem}: Schedule ist serialisierbar, wenn entsprechender Abhängigkeitsgraph zykelfrei ist
+	\item Konflikt-Serialisierbarkeit ist prefix commit-closed
 	\item \textbf{Ansatz nicht praktikabel}:
 	\begin{enumeration}
-		\item Serialisierbarkeit von Schedules nur im Nachhinein überprüfbar
+		\item Serialisierbarkeit nur im Nachhinein überprüfbar
 		\item Administrativer Overhead zu hoch: Abhängigkeiten zu bereits terminierten Transaktionen berücksichtigen
 	\end{enumeration}
+\end{items}
+
+\textbf{Rücksetzbarkeitsklassen}
+\begin{items}
+	\item \underline{Rücksetzbar (RC)}: Commit für $T_j$ erst erlaubt, wenn alle $T_i$ von denen $T_j$ liest, committed sind (Abort darf Semantik von bereits committeten Transaktionen nicht verändern).
+	\item \underline{Avoid cascading aborts (ACA)}: Nur Objekte von bereits committeten Transaktionen lesen.
+	\item \underline{Striktheit (ST)}: Objekte von noch nicht committeten Transaktionen dürfen weder gelesen noch überschrieben werden (ermöglicht einfache Implementierung des Rücksetzens)
 \end{items}
 
 \textbf{Locking}
 \begin{items}
 	\item Lock für jedes Datenobjekt und jede Operationsart
 		\\*
-		Notation: \( ol_i[x] \)
-	\item Einfachster Fall: Nur Read/Write Locks
-		\\*
-		\( \leadsto \) \emph{rx locking scheme}
-	\item \underline{Zwei-Phasen-Sperrprotokoll}:
+		Notation: \( rl_i[x] \), \( wl_i[x] \)
+	\item Aber: Sperrdisziplin alleine reicht für Korrektheit nicht aus!
+	
+	\item \textbf{Zwei-Phasen-Sperrprotokoll (2PL)}:
 	\begin{enumeration}
 		\item Locks werden hinzugenommen
 		\item Locks werden freigegeben
 	\end{enumeration}
-	\( \leadsto \) stellt Serialisierbarkeit sicher
-\end{items}
-
-\textbf{Deadlock}
-\begin{items}
-	\item \( T_1: r_1[x] \to w_1[y] \to c_1, T_2: w_2[y] \to w_2[x] \to c_2 \)
-	\begin{enumeration}
-		\item Beide Transaktionen zuerst keine Locks
-		\item TM sendet \( r_1[x] \) an Scheduler
-			\\*
-			\( \leadsto rl_1[x] \), Scheduler sendet \( r_1[x] \) an DM
-		\item TM sendet \( w_2[y] \) ab Scheduler
-			\\*
-			\( \leadsto wl_2[y] \), Scheduler sendet \( w_2[y] \) an DM
-		\item TM sendet \( w_2[x] \) an Scheduler
-			\\*
-			\( \leadsto wl_2[x] \) nicht möglich \( \leadsto \) Verzögerung
-		\item TM sendet \( w_1[y] \) an Scheduler
-			\\*
-			\( \leadsto wl_1[y] \) nicht möglich \( \leadsto \) Verzögerung
-	\end{enumeration}
-	\( \leadsto \) \textbf{Deadlock}
-\end{items}
-
-\textbf{Strenges 2-Phasen-Sperrprotokoll}
-\begin{items}
-	\item Freigabe der Locks erst nach Transaktionsende
+	\( \leadsto \) Serialisierbarkeit sichergestellt\\
+						Deadlocks sowie kaskadierende Abbrüche weiterhin möglich
+	
+	\item \textbf{Strenges Zwei-Phasen-Sperrprotokoll (S2PL)}: 
+	
+	Atomare Freigabephase am Ende der Transaktion\\
+	\( \leadsto \) Zusätzlich ACA: Vermeidung kaskadierender Abbrüche
+	
+	\item \textbf{Konservatives Zwei-Phasen-Sperrprotokoll (C2PL)}:
+	
+	Atomare Anforderungsphase zu Beginn der Transaktion\\
+	\( \leadsto \) Zusätzlich: Vermeidet Deadlocks
+	
+	\item \textbf{CS2PL}: 
+	
+	Kombination aus streng und konservativ: Atomare Anforderungs- und atomare Freigabephase \\
+	\( \leadsto \) Serialisierbarkeit, ACA, Deadlockfreiheit
+	
+	\item \textbf{Aber:} Jede Einschränkung schränkt auch die Zahl der möglichen Histories ein und verringert damit den möglichen Grad der Parallelität!
+	
 \end{items}
 
 \begin{fragen}
