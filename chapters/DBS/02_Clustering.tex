@@ -6,12 +6,13 @@
 	\item Was ist die nächste Bar, die mein bevorzugtes Bier ausschenkt?
 	\item \underline{Bereichsanfrage}: Wie viele Restaurants gibt es im Stadtzentrum?
 	\item Ähnlichkeitssuche Bilder: Distanz im Merkmalsraum = Maß der Unähnlichkeit
+	\item Ziel eines \underline{Index}: Zahl der zu ladenden Seiten minimieren
 \end{items}
 
 \textbf{Index -- B+-tree}
 \begin{items}
 	\item = non-clustered primary B+-tree
-	\item Beispiel: Student(name, age, gpa, major), B+T für gpa \\* (kleiner=links, größer=rechts, (gpa,(x,y)))
+	\item Beispiel: Student(name, age, gpa, major), B+T für gpa \\* (kleiner=links, größer=rechts, (gpa, (Seite, Eintrag)))
 	\begin{figure}[H]\centering\label{BPTree}\includegraphics[width=0.33\textwidth]{BPTree}\end{figure}
 \end{items}
 
@@ -28,34 +29,34 @@
 \textbf{kd-tree -- k-NN}
 \begin{items}
 	\item k-NN (= \emph{k-next-neighbour}) := Abstand des \( k \)-nächsten Nachbarn
-	\item Notation: E[k-NN]
-	\item Es müssen nur ein paar Rechtecke inspiziert werden, um Resultat zu ermitteln
-	\item Implementierung: Priority Queue (Inhalt Datenobjekte/Baumknoten, sortiert nach Abstand zum Anfragepunkt)
+	\item Es müssen nur ein paar kd-Baum-Regionen inspiziert werden, um Resultat zu ermitteln (Abstand zu Region ist untere Schranke)
+	\item \underline{Implementierung}: Priority Queue (Datenobjekte/Baumknoten, sortiert nach Abstand zum Anfragepunkt) initialisiert mit Wurzelknoten; Vorderstes Objekt aufspalten und Teilobjekte einfügen; Ende wenn Punkt vorne in Queue
 	\item Hier: Baum unbalanciert, Balancierung in Realität für mehrdimensionale Daten
 \end{items}
 
 \textbf{Outlier}
 \begin{items}
-	\item = Element des Datenbestands, das in bestimmter Hinsicht erheblich vom restlichen Datenbestand abweicht
+	\item Element des Datenbestands, das in bestimmter Hinsicht erheblich vom restlichen Datenbestand abweicht
 	\item Mögliche Definition: \\*
 		Objekt \( O \), das in Datenbestand \( T \) enthalten ist ist ein DB(\( p \), \( D \))-Outlier, wenn der Abstand von \( O \) zu mindestens \( p \) Prozent der Objekte in \( T \) größer ist als \( D \).
 	\item \underline{Beispiel}: \( O \) ist Outlier, wenn \( p=0.6 \), da dann mehr als \( 60\% \) der Datenobjekte außerhalb des Kreises liegen
 \end{items}
 \begin{figure}[H]\centering\label{Outlier}\includegraphics[width=0.2\textwidth]{Outlier}\end{figure}
 
-\textbf{Outlier -- Algorithmen}
+\textbf{Outlier -- Index-basiert}
 \begin{items}
-	\item \underline{Index-basiert}: k-NN für jeden Punkt. Stop, sobald k-NN<D
-	\item \underline{Clustering}: Liefert Outliner als Beiprodukt
-	\item \underline{Abstandsbasiert}
-	\item \underline{Dichtebasiert}
+	\item Punkt ist kein Outlier, wenn k-Abstand < D mit $k = N * (1 - p) - 1$
+	\item Für jeden Punkt:\\*
+		k-NN Query, dabei stoppen sobald größte noch mögliche k-NN Distanz < D  (Baumknoten mit k Objekten und größter Distanz < D)
+	\item Viele weitere Ansätze, z.B. \\*
+		\underline{Clustering}: Liefert Outlier als Beiprodukt
 \end{items}
 
 \newpage
 
-\textbf{Clustering -- Beispiel}
+\textbf{Clustering -- Beispiel Customer Segmentation}
 \begin{items}
-	\item Gegeben: Große Kundendatenbank, enthält Eigenschaften und Käufe
+	\item Große Kundendatenbank mit Eigenschaften und Käufen
 	\item Gesucht: Gruppen von Kunden mit ähnlichem Verhalten finden
 \end{items}
 
@@ -63,7 +64,8 @@
 \begin{items}
 	\item \underline{Dichte}: Anzahl Objekte pro Volumeneinheit
 	\item \underline{Dichtes Objekt}: mindestens \( x \) andere Objekte in Kugel um Objekt mit Radius \( \epsilon \) (A)
-	\item \underline{Dichte-erreichbares Objekt}: Objekt in \( \epsilon \)-Umgebung eines dichten Objekts, das selbst nicht dicht ist (= Clusterrand, B, C)
+	\item \underline{Dichte-erreichbares Objekt}: Objekt in \( \epsilon \)-Umgebung eines dichten Objekts, das selbst nicht dicht ist (B, C) \\*
+		Clusterrand, Zuordnung zu Clustern ist nichtdeterministisch
 	\item \underline{Rauschen} (\emph{Noise}): Objekte, die von keinem dichten Objekt erreicht werden können (N)
 \end{items}
 \begin{figure}[H]\centering\label{DBSCAN}\includegraphics[width=0.2\textwidth]{DBSCAN}\end{figure}
@@ -71,13 +73,15 @@
 \textbf{DBSCAN -- Eigenschaften}
 \begin{items}
 	\item \underline{Komplexität}: Lineare, wenn \( \epsilon \)-Umgebungen vorberechnet wurden (oder mit räumlichem Index in konstanter Zeit bestimmt werden können) \\* \( \leadsto \) mehrdimensionale Indexstruktur sehr sinnvoll
-	\item Rauschen liefert mögliche Outlier
+	\item Rauschen liefert \emph{mögliche} Outlier (DBSCAN erstellt Vorauswahl)
 \end{items}
 
 \textbf{Hochdimensionale Datenräume -- Anomalien}
 \begin{items}
+	\item Curse of dimensionality
 	\item \underline{Sparsity}: Raum ist nur dünn mit Punkten besetzt
-	\item Hierarchische Datenstrukturen uneffektiv: bei sehr, sehr vielen Dimensionen ist Abstand zweier Datenobjekte fast gleich dem zweier anderer (unter schwachen Annahmen) \( \leadsto \) keine echten Outliner (Outliner-Algorithmen liefern mehr oder weniger zufälliges Objekt)
+	\item Hierarchische Datenstrukturen ineffektiv: Es müssen immer alle Blätter betrachtet werden
+	\item Keine echten Outlier: bei sehr, sehr vielen Dimensionen ist Abstand zweier Datenobjekte fast gleich dem zweier anderer \( \leadsto \) Outlier-Algorithmen liefern mehr oder weniger zufälliges Objekt
 	\item \( \leadsto \) nur erfolgsversprechende Teilräume nach Ausreißern absuchen
 	\item Interessante Cluster sind i.d.R. nicht Cluster in allen Dimensionen
 \end{items}
