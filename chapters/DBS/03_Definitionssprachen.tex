@@ -63,8 +63,8 @@
 
 \textbf{Data Dictionary}
 \begin{items}
-	\item = Menge von Tabellen und Sichten
-	\item Wie Datenbank aufgebaut
+	\item Verzeichnis der vorhandenen Tabellen und Sichten
+	\item Selbst wie eine Datenbank aufgebaut
 	\item Enthält keine Anwendungsdaten, sondern Struktur-Metadaten
 \end{items}
 
@@ -129,20 +129,18 @@ create table Vorlesungen
 	\item \begin{lstlisting}[language=sql]
 alter table Lehrstuehle
   add Budget decimal(8,2)
+  add constraint Namekey primary key (Name, Vorname)
 \end{lstlisting}
 	\item \( \leadsto \) Änderung Relationsschema im Data Dictionary, existierende Daten werden um \lstinline[language=sql]{null}-Attribut erweitert
 	\item \begin{lstlisting}[language=sql]
 drop spaltenname { restrict | cascade }
+drop table basisrelationenname { restrict | cascade }
 \end{lstlisting}
-\item \( \leadsto \) Attribut löschen, falls
+\item \( \leadsto \) Attribut / Tabelle löschen, dabei gilt:
 \begin{enumeration}
 	\item \lstinline[language=sql]{restrict}: keine Sichten/Integritätsbedingungen mit diesem Attribut definiert wurden
 	\item \lstinline[language=sql]{cascade}: gleichzeitig diese Schichten/Integritätsbedingungen mitgelöscht werden sollen
 \end{enumeration}
-\item \begin{lstlisting}[language=sql]
-drop table basisrelationenname { restrict | cascade }
-\end{lstlisting}
-\item \( \leadsto \) analog zu Attribut
 \end{items}
 
 \textbf{Speicherhierarchie}
@@ -155,19 +153,20 @@ drop table basisrelationenname { restrict | cascade }
 	\item Index kann nachträglich angelegt bzw. gelöscht werden, ohne Daten selbst zu löschen
 	\item Index Bestandteil der physischen Ebene, Index-Definition Teil des internen Schemas
 	\item \lstinline[language=sql]{select name from Student where gpa > 4} liefert Ergebnis unabhängig von Existenz eines Index -- wenn vorhanden erhebliche Beschleunigung
-	\item \lstinline[language=sql]{create unique index typ on auto(hersteller, modell, baujahr)} \\* hilft bei Herstellersuche, weniger bei Suche nach Baujahr
+	\item \lstinline[language=sql]{create [unique] index typ on auto(hersteller, modell, baujahr)} \\* hilft bei Herstellersuche, weniger bei Suche nach Baujahr
+	\item Unique Index zur Simulation von Schlüsselbedingungen
 \end{items}
 \begin{figure}[H]\centering\label{Index}\includegraphics[width=0.33\textwidth]{Index}\end{figure}
 
 \begin{fragen}
 	\begin{enumeration}
 		\item Erläutern Sie anhand eines Anwendungsbeispiels, warum man die Menge der zulässigen Zustände einschränken will.
-		\item Erläutern Sie: Schema-Konsistenz, Datenbasis-Konsistenz.
+		\item Was ist Schema-Konsistenz, Datenbasis-Konsistenz?
 		\item Was ist ein (DB-)Schema?
 		\item Was ist das Data Dictionary?
 		\item Warum sollte man sich die Mühe machen, Integritätsbedingungen als Teil des DB-Schemas zu formulieren?
 		\item Sind Integritätsbedingungen Bestandteil des internen oder des konzeptuellen Schemas? Begründen Sie Ihre Antwort.
 		\item Wieso sind Indices Bestandteil des internen und nicht des konzeptuellen Schemas?
-		\item Geben Sie Beispiele dür DB-Features an, die zeigen, dass DB-Systeme physische Datenunabhängigkeit nicht vollständig umsetzen.
+		\item Geben Sie Beispiele für DB-Features an, die zeigen, dass DB-Systeme physische Datenunabhängigkeit nicht vollständig umsetzen.
 	\end{enumeration}
 \end{fragen}
