@@ -1,6 +1,57 @@
 \section{Relationaler Datenbankentwurf}
 \label{sec:abbildenRelational}
 
+\textbf{Funktionale Abhängigkeiten (FD)}
+\begin{items}
+	\item In Relation \( R(X,Y) \) ist \( Y \) von \( X \) funktional abhängig (schreibe \( X \to Y \)), falls zu jedem \( X \)-Wert genau ein \( Y \)-Wert gehört \\*
+	 (z.B. ISBN $\to$ Buchtitel, Inventarnr. oder Stadt $\to$ Bundesland)
+	\item \( \leadsto \) ``\( X \) bestimmt \( Y \)''
+	\item Festlegung der FDs a priori beim Schemaentwurf (enthält semantische Information für höhere Konsistenz), nicht hinterher aus dem Datenbestand
+	\item Spezialfall \underline{Schlüssel} X für Relation R: $X \to R$ und X minimal
+	\item \underline{Transitiv}: $X \to  Y  \to  Z \Rightarrow  X  \to Z$
+	\item \( F \): Menge von FDs (\emph{funcional dependencies}), \( f \in F \) einzelne FD
+	\item \( F \) impliziert \( f \): \( F \models f \)   $\qquad$  (bedeutet $SAT_R(F) \subseteq SAT_R(f)$)
+	\item \underline{Hülle}: \( F_R^+ = \{ f \mid (f \text{ FD über} R) \wedge F \models f \} \)
+	\item \underline{Reflexiv}: $X \to X$ (und $F \models X \to X$ für alle F, X)
+	\item \underline{Akkumulativ}: $X \to YZ, Z \to VW \Rightarrow X \to YZV$
+	\item \underline{Projektiv}: $X \to YZ \Rightarrow X \to Y$
+	\item Äquivalente FD-Mengen (Überdeckungen): \( F \equiv G \) falls \( F^+ = G^+ \)
+\end{items}
+
+\textbf{RAP-Algorithmus für das Membership-Problem}
+\begin{items}
+	\item  Problem: Menge von FDs $F$. Gilt $X \to Y \in F^+$?
+	\item Lösung in linearer Zeit:
+	\begin{enumerate}
+		\item $X^* :=  X$ (R-Regel)
+		\item Erweitere $X^* := X^* \cup Y_1$ für $X_1 \to Y_1$ mit $X_1 \subseteq X^*$ bis $X^*$ stabil (A-Regel)
+		\item Ist $Y \subseteq X^*$, gilt $X \to Y$ (P-Regel)
+	\end{enumerate}
+\end{items}
+
+\textbf{Redundanzen - Anomalien}
+\begin{items}
+	\item Belegen unnötigen Speicherplatz
+	\item Widersprüchliche oder fehlende Eingaben (\underline{Einfügeanomalie})
+	\item Änderungen parallel in allen Vorkommen nötig (\underline{Updateanomalie})
+	\item Informationen können beim Löschen anderer Inhalte mit verloren gehen (\underline{Löschanomalie})
+\end{items}
+
+\textbf{Abhängigkeitstreue}
+\begin{items}
+	\item Alle gegebenen Abhängigkeiten sind durch Schlüssel repräsentiert
+	\item Genauer: Menge der Abhängigkeiten (FDs) äquivalent zur Menge der Schlüsselabhängigkeiten.
+\end{items}
+
+\textbf{Verbundtreue}
+\begin{items}
+	\item Originalrelationen können durch Verbund der Basisrelationen wiedergewonnen werden
+	\item Kriterium für zwei Relationen:
+	Dekomposition von X in $X_1$ und $X_2$ verbundtreu, wenn $X_1 \cap X_2 \to X_1$ oder $X_1 \cap X_2 \to X_2$
+	\item Allgemeines Kriterium: 
+	Wenn eine abhängigkeitstreue Dekomposition von R in $X_i$ einen Universalschlüssel erhält (also für ein $X_i$ gilt $X_i \to R$), so ist sie verbundtreu.
+\end{items}
+
 \textbf{Universalrelation}
 \begin{items}
 	\item \underline{Universalrelation} (von \( R_1, \dots, R_n \)): \( R = R_1 \bowtie \cdots \bowtie R_n \)
@@ -11,43 +62,11 @@
 	\begin{figure}[H]\centering\label{Join}\includegraphics[width=0.33\textwidth]{Join}\end{figure}
 \end{items}
 
-\textbf{Funktionale Relation}
-\begin{items}
-	\item In Relation \( R(X,Y) \) ist \( Y \) von \( X \) funktional abhängig (schreibe \( X \to Y \)), falls zu jedem \( X \)-Wert genau ein \( Y \)-Wert gehört (z.B. Buchtitel, ISBN-Nummer oder Stadt, Bundesland)
-	\item \( \leadsto \) ``\( X \) bestimmt \( Y \)''
-	\item \( F \): Menge von FDs (\emph{funcional dependencies}), \( f \in F \) einzelne FD
-	\item \( F \) impliziert \( f \): \( F |= f \)
-	\item \underline{Hülle}: \( F_R^+ = \{ f \mid (f \text{ FD über} R) \wedge F |= f \} \)
-	\item \underline{Transitiv}: PLZ \( \to \) Ort \( \to \) Bundesland \\* \( \leadsto \) PLZ \( \to \) Bundesland
-	\item \underline{Projektiv}: ISBN \( \to \) Autor Verlag \\* \( \leadsto \) ISBN \( \to \) Autor
-	\item \underline{Akkumulativ}: ISBN \( \to \) Verlag Autor, Autor \( \to \) Straße Ort \\* \( \leadsto \) ISBN \( \to \) Verlag Autor Straße
-	\item Äquivalente FD-Mengen (Überdeckungen): \( F \equiv G \) falls \( F^+ = G^+ \)
-\end{items}
-
-\textbf{Anomalien}
-\begin{figure}[H]\centering\label{Anomalien}\includegraphics[width=0.33\textwidth]{Anomalien}\end{figure}
-\begin{items}
-	\item \underline{Updateanomalie}: Büro von Böhm ändert sich \\* \( \leadsto \) Änderung mehrerer Einträge \\* \( \leadsto \) Aufwendig, fehleranfällig. Wie vermeiden?
-	\item \underline{Einfügeanomalie}: Neuer Dozent ohne VL (NULL-Werte) \\* \( \leadsto \) Was wenn VNr Schlüssel?
-	\item \underline{Löschanomalie}: Mülle hält Workflow nicht mehr \\* \( \leadsto \) Tupel löschen \( \leadsto \) Müssel-Information verloren
-\end{items}
-
-\textbf{Abhängigkeitstreue}
-\begin{items}
-	\item Beispiel: (InvNr, Titel, \underline{ISBN}, \underline{Autor}) \\* oder (InvNr, Titel, \underline{ISBN}), (\underline{ISBN}, \underline{Autor}) \\* oder (InvNr, Titel, \underline{ISBN}), (\underline{ISBN}, Autor)?	
-	\item Abhängigkeitstreu: Alle gegebenen Abhängigkeiten sind durch Schlüssel repräsentiert
-\end{items}
-
-\textbf{Verbundtreue}
-\begin{items}
-	\item Originalrelationen können durch Verbund der Basisrelationen wiedergewonnen werden
-\end{items}
-
 \newpage
 
 \textbf{Entwurfsziel}
 \begin{items}
-	\item Relationenschemata, (Fremd-)Sclüssel so wählen, dass
+	\item Relationenschemata, (Fremd-)Schlüssel so wählen, dass
 	\begin{enumeration}
 		\item alle Anwendungsdaten aus Basisrelation hergeleitet werden können (\emph{Verbundtruee})
 		\item nur semantisch sinnvolle und konsistente Anwendungsdaten dargestellt werden können (\emph{Abhängigkeitstreue})
@@ -57,23 +76,26 @@
 
 \textbf{Erste Normalform}
 \begin{items}
-	\item Nur atomare Attribute in Relationenschemata
+	\item Nur \textbf{atomare Attribute} in Relationenschemata
 \end{items}
 
 \textbf{Zweite Normalform}
 \begin{items}
+	\item Keine \textbf{partiellen Abhängigkeiten} eines Nicht-Primattributs von einem möglichen Schlüssel
+	\item Auflösen durch Abtrennen der rechten und Kopie der linken Seite
+	\item \underline{Partielle FD}: Nicht-Primattribut hängt voll funktional von \underline{einem Teil} eines Schlüsselkandidaten ab.
 	\item \underline{Volle FD}: \( \beta \) ist voll funktional abhängig von \( \alpha \), wenn aus \( \alpha \) kein Attribut entfernt werden kann, so dass FD immer noch gilt.
 	\item Gegenbeispiel: PLZ, Bundesland \( \to \) Ort
-	\item \underline{Partielle FD}: liegt vor, wenn ein Nicht-Primattribut voll funktional von einem Teil eines Schlüsselkandidaten abhängt
-	\item \underline{Zweite NF}: keine partiellen Abhängigkeiten \\* \( \leadsto \) Durch Struktur der Abhöngigkeiten Redundanzen entdecken
 \end{items}
 
 \textbf{Dritte Normalform}
 \begin{items}
-	\item \underline{Transitive Abhängigkeit}: Schlüssel \( K \) bestimmt Attributmenge \( X \) funktional, ist selber aber auch Attributmenge \( Y \) \\* \( \leadsto \) transitive Abhängigkeit \(  \to X \to Y \)
-	\item \underline{dritte NF}: Keine transitiven Abhängigkeiten zwischen einem möglichen Schlüssel und weiteren nicht-Primattributen
-	\item Erreichen durch Elimination von \( Y \) und Kopie von \( X \)
-	\item 3NF impliziert 2NF, da partielle Abhängigkeit Spezialfall von transitiver Abhängigkeit
+	\item Keine \textbf{transitiven Abhängigkeiten} eines Nicht-Primattributs von einem möglichen Schlüssel
+	\item \underline{Transitive Abhängigkeit}: Schlüssel \( K \) bestimmt Attributmenge \( X \) funktional, diese wiederum bestimmt Attributmenge \( Y \) \\* 
+	(und $X \nrightarrow K, \quad Y \notin KX$ ) \\*
+	\( \leadsto \) Transitive Abhängigkeit \(K  \to X \to Y \)
+	\item Erreichen durch Abspalten von \( Y \) und Kopie von \( X \)
+	\item 3NF impliziert 2NF, da partielle Abhängigkeit Spezialfall von transitiver Abhängigkeit (wähle $X \subsetneq K$)
 \end{items}
 
 \textbf{Boyce-Codd-Normalform}
@@ -81,20 +103,23 @@
 	\item Relationenschema \( \mathcal{R} \) mit FDs \( F \) ist in BCNF, wenn für jede FD \( \alpha \to \beta \) eine der folgenden Bedingungen gilt:
 	\begin{enumeration}
 		\item \( \beta \subseteq \alpha \) (triviale Abhängigkeit)
-		\item \( \alpha \) Schlüssel von \( \mathcal{R} \) (oder Obermege eines Schlüssels von \( \mathcal{RLÖ} \))
+		\item \( \alpha \) Schlüssel von \( \mathcal{R} \) (oder Obermege eines Schlüssels von \( \mathcal{R} \))
 	\end{enumeration}
-	\item liefert Zerlegung von \( \mathcal{R}_i \) in \( \mathcal{R}_{i1} = (\alpha \cup \beta), \mathcal{R}_{i2} = \mathcal{R}_i-(\alpha \cup \beta) \) \\* (\( F \ni f : \alpha \to \beta, \beta \) maximal)
+	\item Zerlegung von \( \mathcal{R} \) in \( \mathcal{R}_{1} = (\alpha \cup \beta), \mathcal{R}_{2} = \mathcal{R}-\beta \) \\* (\( F \ni f : \alpha \to \beta, \beta \) maximal)
+	\item Verbundtreu: $R_1 \cap R_2 = \alpha$ ist Schlüssel von $R_1$
+	\item Aber nicht immer Abhängigkeitstreu: Abhängigkeiten können beim Zerlegen verloren gehen!
+	\item Dritte Normalform daher meist ausreichend
 \end{items}
 
 \textbf{Minimalität}
 \begin{items}
-	\item Ziel: Kiterien mit möglichst wenigen Relationenschemata erreichen
+	\item Kriterien mit möglichst wenigen Relationenschemata erreichen
 \end{items}
 
 \textbf{Dekomposition}
 \begin{items}
 	\item Prinzip: Immer wenn \( X \to Y \to Z \) wird Relation zerlegt
-	\item erreicht nur 3NF und Verbundtreue
+	\item Erreicht nur 3NF und Verbundtreue
 	\item \underline{Normalisierung}: Falls \( K \to X \to Y \), dann \( Y \) aus \( R \) entfernen und mit \( X \) in neues Relationenschema stecken
 	\item Beispiel: \( U = \{ \text{PANr}, \text{PLZ}, \text{Ort}, \text{Land}, \text{Staat} \} \), \\*
 	\( F = \{ \text{PANr} \to \text{PLZ}, \text{PLZ} \to \text{Ort}, \text{Ort} \to \text{Land}, \text{Land} \to \text{Staat} \} \) \\*
@@ -105,8 +130,7 @@
 		\item \( R_2 = \{ \text{PANr}, \text{PLZ}, \text{Ort}, \text{Land} \} \)
 	\end{enumeration}
 	Wiederholen mit \( R_2 \)
-	\item \underline{Vorteile}: 3NF, Verbundtreue
-	\item \underline{Nachteile}: Keine Abhängigkeitstreue, keine Minimalität, reihenfolgeabhängig, NP-vollständig (Schlüsselsuche)
+	\item \underline{Probleme}: Keine Abhängigkeitstreue, keine Minimalität, reihenfolgeabhängig, NP-vollständig (Schlüsselsuche)
 \end{items}
 
 \newpage
@@ -114,13 +138,13 @@
 \textbf{Syntheseverfahren}
 \begin{items}
 	\item Prinzip: Synthese formt Original-FD-Menge \( F \) in Menge von Schlüsselabhängigkeiten \( G \) so um, dass \( F \equiv G \)
-	\item Abhängigkeitstreue integriert
-	\item 3NF und Minimalität werden reihenfolgeunabhängig erreicht
-	\item polynomielle Zeitkomplexität
-	\item Übersicht:
+	\item Abhängigkeitstreue per Definition; Verbundtreue (nur mit Trick), 3NF und Minimalität werden reihenfolgeunabhängig erreicht
+	\item Polynomielle Zeitkomplexität
+	\item \textbf{Verfahren}:
 	\begin{enumeration}
 		\item Redundanzen eliminieren: \\*
-		Entfernen unnötiger FDs und Attribute (\( f \) überflüssig wenn \( F \equiv F - \{  f \} \), überflüssige Attribute später)
+		Entfernen überflüssiger FDs und Attribute \\*
+		(\( f \) überflüssig wenn \( F \equiv F - \{  f \} \))
 		\item FDs zu Äquivalenzklassen zusammenfassen: \\*
 		FDs in selber Klasse, wenn sie äquivalente linke Seiten haben \( \leadsto \) ein Relationenschema pro Äquivalenzklasse
 	\end{enumeration}
@@ -130,6 +154,8 @@
 		\item Überflüssige Attribute: \( B \) in \( AB \to C \) \\* Stand: \( F'' = \{ \underbrace{A \to B, A \to C, B \to A}_{\text{Äquivalenzklasse}}, C \to E \} \)
 		\item Ergebnis Relationenschema: \\* \( (ABC, \{ \{ A \}, \{ B \} \}), (CE, \{ \{ C \} \}) \)
 	\end{enumeration}
+
+	\item Trick \textbf{Verbundtreue}: Orignal FD-Menge um $R \to \delta$ erweitern
 \end{items}
 
 \textbf{Mehrwertige Abhängigkeiten}
@@ -157,9 +183,8 @@
 \begin{items}
 	\item Beispiel: Relation mit Attributen \emph{Name}, \emph{Neffe}, \emph{Hobby} \\*
 		Es gelte MVD: \emph{Name} \( \twoheadrightarrow \) Neffe \\*
-		Wenn \\*
-		(Heinrich, Martin, Autos) und (Heinrich, Thomas, Basteln) \\*
-		\( \in r \), dann auch \\*
+		Wenn (Heinrich, Martin, Autos) und (Heinrich, Thomas, Basteln) 
+		\( \in r \), dann auch 
 		(Heinrich, Martin, Basteln) und (Heinrich, Thomas, Autos)
 	\item Formal: \( r \) genügt MVD \( X \twoheadrightarrow Y \Leftrightarrow \) \\*
 		\( \forall t_1, t_2 \in r: [(t_1 \neq t_2 \wedge t_1(X) = t_2(X)) \\* \Rightarrow \exists t_3 \in r: t_3(X)=t_1(X) \wedge t_3(Y)=t_1(Y) \wedge t_3(Z) = t_2(Z) ] \) 
