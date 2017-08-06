@@ -1,61 +1,39 @@
 \section{Relationale Datenbanksprachen}
 \label{sec:sql}
 
-\textbf{Aggregatfunktionen}
-\begin{items}
-	\item Prinzip: Berechnung eines Werts aus Werten eines Attributs
-	\item \underline{Join (natural)}: Kartesisches Produkt zweier Relationen
-	\item Weitere in Standard SQL: count(), sum(), min(), max(), avg()
-\end{items}
-
 \textbf{SQL-Kern}
 \begin{items}
 	\item \underline{select} \\*
-		Projektionsliste, \\*
-		arithmetische Operationen und Aggregatfunktionen \\*
-		\textbf{select distinct}: keine Dopplungen 
+		Projektionsliste \\*
+		Attribute, arithmetische Ausdrücke, Aggregatfunktionen \\*
+		\textbf{select distinct}: keine Dopplungen\\*
+		Umbenennungen: \lstinline[language=sql]{select Preis * 1.44 as DollarPreis }
 	\item \underline{from} \\*
-		zu verwendende Relationen, ggf. Umbenennungen
+		Zu verwendende Relationen, Umbenennungen\\*
+		Orthogonalität: Wiederum SFW-Block möglich\\*
+		\lstinline[language=sql]{select * from (select [...]) where [...] }
 	\item \underline{where} \\*
-		Selektions- und Verbundbedingungen \\*
-		geschachtelte Anfragen (wieder SFW-Block) \\*
+		Selektions- und Verbundbedingungen, \\*
+		geschachtelte Anfragen (wieder SFW-Block)
 	\item \underline{group by} \\*
 		Gruppierung für Aggregatfunktionen
 	\item \underline{having} \\*
 		Selektionsbedingungen an Gruppen
 \end{items}
 
-\textbf{Self-Join}
+\textbf{from - Mehrere Relationen}
 \begin{items}
-	\item Kartesisches Produkt einer Tabelle mit selbst
-	\item Beispiel:
-		\begin{lstlisting}[language=sql] 
-select * from SNUser eins, SNUser zwei
-	where eins.Alter < zwei.Alter
-		\end{lstlisting}
-		Vierspaltiges Ergebnis:
-		\begin{lstlisting}[language=sql]
-eins.Name, eins.Vorname,
-zwei.Name, zwei.Vorname
-		\end{lstlisting}
-\end{items}
-
-\textbf{Kartesisches Produkt}
-\begin{items}
-	\item Verbunde als explizite Operatoren:
-		\begin{lstlisting}[language=sql]
+	\item Bei mehr als einer Relation: \textbf{Kartesisches Produkt}
+	\item Kommagetrennt oder als expliziter Operator:
+	\begin{lstlisting}[language=sql]
+select * from Kuenstler K, Titel T
 select * from Kuenstler cross join Titel
-		\end{lstlisting}
+	\end{lstlisting}
 \end{items}
 
 \textbf{Natürlicher Verbund}
 \begin{items}
-	\item Oft besser als herkömmliche Formulierung, weil
-	\begin{enumeration}
-		\item übersichtlicher
-		\item weniger fehleranfällig (man vergisst leicht Attribut, wenn man alle aufzählen muss)
-	\end{enumeration}
-	\item
+	\item Automatischer Equi-Join auf allen übereinstimmenden Spalten, diese erscheinen nur ein mal in der Ergebnisrelation
 	\begin{lstlisting}[language=sql]
 select * from Kuenstler natural join Titel
 	\end{lstlisting}
@@ -68,95 +46,117 @@ select * from Kuenstler natural join Titel
 select * from Kuenstler 
 	join Titel on Kuenstler.KID = Titel.KID
 	\end{lstlisting}
-	\item Beispiel: (AutoModell, AutoPreis), (BootModell, BootPreis) \\*
-	Kunde will Boot und Auto, aber Boot soll billiger sein als Auto \\*
-	\( \leadsto \text{Auto} \bowtie_{AutoPreis > BootPreis} \text{Boot} \)
+	\item Beispiel: \(  \text{Auto} \bowtie_{AutoPreis > BootPreis} \text{Boot} \)
 \end{items}
 
 \textbf{Outer, Left, Right Join}
-\begin{figure}[H]\centering\label{SQLJoin}\includegraphics[width=0.4\textwidth]{SQLJoin}\end{figure}
+\begin{items}
+	\item Dangling Tuples übernehmen und mit Nullwerten füllen
+	\begin{figure}[H]\centering\label{SQLJoin}\includegraphics[width=0.4\textwidth]{SQLJoin}\end{figure}
+\end{items}
+
+\textbf{Self-Join}
+\begin{items}
+	\item Kartesisches Produkt einer Tabelle mit selbst
+	\begin{lstlisting}[language=sql] 
+	select * from SNUser eins, SNUser zwei
+	where eins.Alter < zwei.Alter
+	\end{lstlisting}
+	Vierspaltiges Ergebnis:
+	\begin{lstlisting}[language=sql]
+eins.Name, eins.Vorname, zwei.Name, zwei.Vorname
+	\end{lstlisting}
+	\item Anwendungen: Vergleichen oder Zählen von Wertemengen
+\end{items}
 
 \newpage
 
 \textbf{where}
 \begin{items}
-	\item Trivial: \lstinline[language=sql]{where Buecher.Titel = "Titel"}
-	\item Verbundbedingung (alternativ):
+	\item Konstanten-Selektion: \\*
+	\lstinline[language=sql]{select * from Buecher where Buecher.Titel = "Titel"}
+	\item Verbundbedingung bei Cross-Join (Attribut-Selektion):
 	\begin{lstlisting}[language=sql]
 select Buecher.Titel, Buecher_Stichwort.Stichwort
 	from Buecher, Buecher_Stichwort
 	where Buecher.ISBN = Buecher_Stichwort.ISBN
 	\end{lstlisting}
-	\item \lstinline[language=sql]{like}: Ungewissheitsselektion (RegEx) \\*
-	\lstinline[language=sql]{where attribut like spezialkonstante}
+	\item \lstinline[language=sql]{like}: Ungewissheitsselektion
+	(\lstinline[language=sql]{where name like "C\%"})\\*
+	'\%' -- Beliebig viele Zeichen $\qquad$ '\_' -- Genau ein Zeichen
+	\item \lstinline[language=sql]{and, or, not, is null}
 	\item \lstinline[language=sql]{in}: \lstinline[language=sql]{where ISBN in (select ISBN from Empfiehlt)}
 \end{items}
 
-\textbf{Mengen -- Vereinigung}
+\textbf{Verzahnt geschachtelte Anfragen}
 \begin{items}
-	\item 
+	\item In der inneren Anfrage Attribute aus der äußeren verwenden
 	\begin{lstlisting}[language=sql]
-select A, B, C from R1 union 
+select Nachname from Personen
+where 1.0 in (select Note from Prueft
+	where PANr = Personen.PANr)
+	\end{lstlisting}
+	\item \lstinline[language=sql]{Exists}: Test, ob Ergebnis der inneren Anfrage nicht leer ist
+	\begin{lstlisting}[language=sql]
+select ISBN from Buch
+where exists (select * from Ausleihe
+	where Invnr = Buch.Invnr)
+	\end{lstlisting}
+\end{items}
+
+\textbf{Mengenoperationen}
+\begin{items}
+	\item Übernimmt Attributnamen des linken Operanden
+	\item Vereinigung
+	\begin{lstlisting}[language=sql]
+select A, B, C from R1 union [all]
 	select A, C, D from R2
 	\end{lstlisting}
-	\item \lstinline[language=sql]{union}: Duplikate werden eliminiert
 	\item \lstinline[language=sql]{union all}: Duplikate werden behalten
+	\item Differenz: \lstinline[language=sql]{except}
+	\item Durchschnitt: \lstinline[language=sql]{intersect}
 \end{items}
 
-\textbf{Mengen -- Differenz}
+\textbf{Aggregatfunktionen}
 \begin{items}
-	\item Alle Mitarbeiter, die keine Studierenden sind:
-	\begin{lstlisting}[language=sql]
-select PANr from Mitarbeiter
-	EXCEPT select PANr from Studenten
-	\end{lstlisting}
+	\item Prinzip: Berechnung eines Werts aus Werten eines Attributs\\*
+		\lstinline[language=sql]{ sum([all / distinct] Attributname) }
+	\item Standard SQL: \lstinline[language=sql]{count(), sum(), min(), max(), avg()}
+	\item Speziell: \lstinline[language=sql]{count(*)}
+	\item Modifikatoren: \lstinline[language=sql]{all / distinct} (Voreinstellung: all)
 \end{items}
 
-\textbf{Mengen -- Durchschnitt}
+\textbf{Group by}
 \begin{items}
-	\item Alle Mitarbeiter, die auch Studenten sind:
-	\begin{lstlisting}[language=sql]
-select PANr from Mitarbeiter
-	INTERSECT select PANr from Studenten
-	\end{lstlisting}
-\end{items}
-
-\textbf{Umbenennung}
-\begin{items}
-	\item
-	\begin{lstlisting}[language=sql]
-select ISBN, Preis * 1.44 as DollarPreis 
-	from BuchVersionen
-	\end{lstlisting}
-\end{items}
-
-\textbf{Grouping}
-\begin{figure}[H]\centering\label{Zulassungen}\includegraphics[width=0.2\textwidth]{Zulassungen}\end{figure}
-\begin{items}
+	\item Gruppierung G: Für gleiche G-Werte werden Resttupel in Relation gesammelt, darauf dann Aggregatfunktionen angewendet
 	\item
 	\begin{lstlisting}[language=sql]
 select Marke, sum(Anzahl)
 	from Zulassungen
 	group by Marke
 	\end{lstlisting}
-	\item 
-	\begin{lstlisting}[language=sql]
-select Marke, max(Anzahl)
-	from Zulassungen
-	group by Marke
-	\end{lstlisting}
-	\item \lstinline[language=sql]{having}-Bedingung:
+	\item \textbf{Wichtig:} Jedes Select-Attribut muss entweder Gruppiert oder Aggregiert werden!
+	\item \lstinline[language=sql]{having}: Bedingung auf gruppierter Relation
 	\begin{lstlisting}[language=sql]
 select PANr, sum(Entlohnung)
 	from anstellungen
 	group by PANr
 	having sum(entlohnung) > 10000
 	\end{lstlisting}
+	
+	\item
+	\begin{lstlisting}[language=sql]
+select Matrikelnr from Pruefung
+	group by Matrikelnr
+	having avg(Note) < (select avg(Note) from Pruefung)
+	\end{lstlisting}
 \end{items}
+
+\newpage
 
 \textbf{Quantoren}
 \begin{items}
-	\item \lstinline[language=sql]{any/some}:
+	\item \lstinline[language=sql]{any/some} (äquivalent):
 	\begin{lstlisting}[language=sql]
 select PANr, ImmaDatum
 	from Studenten
@@ -169,51 +169,52 @@ select Name from Kunde, Bestellung
 	and bestellwert > ALL (SELECT avg(bestellwert) 
 		from Bestellung group by KundeID)
 	\end{lstlisting}
+	\item Aber: Anwendbarkeit eingeschränkt, z.B. kein Vergleich auf Mengengleichheit
 \end{items}
 
-\newpage
-
-\textbf{Sortieren}
+\textbf{order by}
 \begin{items}
-	\item \lstinline[language=sql]{order by}-Klausel:
+	\item Menge von Tupeln $\leadsto$ Sortierte Liste
 	\begin{lstlisting}[language=sql]
 select MatNr, Note from Prueft
 	where V_Bez = 'DBS'
-	order by Note asc
+	order by Note [asc / desc], MatNr
 	\end{lstlisting}
-	\item alternativ: \lstinline[language=sql]{desc}
+	\item Aufsteigend (\lstinline[language=sql]{asc}, Standard) oder Absteigend (\lstinline[language=sql]{desc})
+	\item \textbf{Wichtig}: Sortier-Attribut(e) müssen in Select vorkommen!\\*
+	Denn: Sortierung wird auf das Ergebnis der vorherigen SFW-Anfrage angewendet.
 \end{items}
 
 \textbf{Nullwerte}
 \begin{items}
 	\item Vergleiche mit Nullwert: \lstinline[language=sql]{unknown} statt \lstinline[language=sql]{true} oder \lstinline[language=sql]{false} \\*
 	\( \leadsto A=A \) keine Tautologie!
+	\item Deshalb \textbf{nicht gleich}: \lstinline[language=sql]{select * from Person} und \\* \lstinline[language=sql]{select * from Person where Name = Name}\\*
+	(Letzteres eliminiert Tupel mit Name = null)
 \end{items}
 
-\textbf{Update}
+\textbf{Änderungsoperationen}
 \begin{items}
-	\item
+	\item \textbf{Insert}
+	\begin{lstlisting}[language=sql]
+insert into relation [(attribut1, ...)]
+	values (wert1, ...)
+	\end{lstlisting}
+	
+	\item Auch SQL-Anfragen als Wert möglich.
+	\begin{lstlisting}[language=sql]
+insert into Kunde (select LName, LAdr, 0 from Lieferant)
+	\end{lstlisting}
+	
+	\item \textbf{Update}
 	\begin{lstlisting}[language=sql]
 update relation set attribut1 = wert, ... 
 	[where bedingung]
 	\end{lstlisting}
-\end{items}
-
-\textbf{Delete}
-\begin{items}
-	\item
+	
+	\item \textbf{Delete}
 	\begin{lstlisting}[language=sql]
 delete from relation [where bedingung]
-	\end{lstlisting}
-\end{items}
-
-\textbf{Insert}
-\begin{items}
-	\item
-	\begin{lstlisting}[language=sql]
-insert into Kuenstler(KID, NAME, LAND, JAHR)
-	values (1022, 'Raul Seixas', 
-		1945, 'Brasilien')
 	\end{lstlisting}
 \end{items}
 
