@@ -12,6 +12,8 @@
 	\item \( F \): Menge von FDs (\emph{funcional dependencies}), \( f \in F \) einzelne FD
 	\item \( F \) impliziert \( f \): \( F \models f \)   $\qquad$  (bedeutet $SAT_R(F) \subseteq SAT_R(f)$)
 	\item \underline{Hülle}: \( F_R^+ = \{ f \mid (f \text{ FD über} R) \wedge F \models f \} \)
+	\item Hülle einer Attributmenge X bezuüglich F ist \\*
+	$X^*_F := \{ A \mid X \to A \in F^+ \}$
 	\item \underline{Reflexiv}: $X \to X$ (und $F \models X \to X$ für alle F, X)
 	\item \underline{Akkumulativ}: $X \to YZ, Z \to VW \Rightarrow X \to YZV$
 	\item \underline{Projektiv}: $X \to YZ \Rightarrow X \to Y$
