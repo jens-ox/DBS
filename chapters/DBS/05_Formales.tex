@@ -1,34 +1,38 @@
 \section{Relationenentwurf}
 \label{sec:relationenentwurf}
 
-\textbf{Integritätsbedingungen}
-\begin{items}
-	\item Schlüssel und Fremdschlüssel einzige Integritätsbedingungen im relationalen Modell
-\end{items}
-
 \textbf{Formalisierung Relationenmodell}
 \begin{items}
 	\item \underline{Universum} \( U \): nichtleere endliche Menge \( U \)\\* (z.B. \( U= \{ \text{Name}, \text{Alter}, \text{Haarfarbe}, \dots \} \))
 	\item \underline{Attribut}: \( A \in U \)
 	\item \underline{Domäne} \( D \in \{ D_1, \dots, D_m \} \): endliche, nichtleere Menge \\* (z.B. \( D_1 = \{ 1,2,3,\dots \}, D_2 = \{ \text{schwarz}, \text{rot}, \text{blond} \} \))
-	\item \underline{Attributwert}: \( \text{dom}: U \to D \): total definierte Funktion, \( \text{dom}(A) \) Domäne von \( A \), \( w \in \text{dom}(A) \) Attributwert für \( A \) \\* (z.B. \( \text{dom}(\text{Haarfarbe}) = \{ \text{schwarz}, \text{rot}, \text{blond} \} \))
+	\item \underline{Attributwert}: \( w \in \text{dom}(A) \) Attributwert für \( A \), \( \text{dom}: U \to D \): total definierte Funktion, \( \text{dom}(A) \) Domäne von \( A \) \\* (z.B. \( \text{dom}(\text{Haarfarbe}) = \{ \text{schwarz}, \text{rot}, \text{blond} \} \))
 	\item \underline{Relationenschema}: \( R \subseteq U \)
-	\item \underline{Tupel} (\( t \) in \( R = \{ A_1, \dots, A_n \} \)): \( t: R \to \bigcup_{i=1}^m D_i \)
+	\item \underline{Tupel} (\( t \) in \( R = \{ A_1, \dots, A_n \} \)): \( t: R \to \bigcup_{i=1}^n D_i \)
 	\item \underline{Relation} (\( r \) über \( R = \{ A_1, \dots, A_n \} \)): endliche Menge von Tupeln \\* Notation: \( r(R) \) (Relation \( r \), Relationenschema \( R \))
 	\begin{figure}[H]\centering\label{BeispielRelation}\includegraphics[width=0.33\textwidth]{BeispielRelation}\end{figure}
 	\item Beispiel: \\* \( R = \{ \text{Alter}, \text{Haarfarbe}, \text{Name} \} \) \\* \( r \) besteht aus Tupeln \( t_1, t_2, t_3 \); \( t_1(\text{Name}) = \text{``Andreas''} \) usw.
-	\item \underline{REL}: \( \text{REL}(R) = \{ r \mid r(R) \} \) \\* Menge aller \( r \), die Relation von \( R \) sind \\* (\( r \) oben: \( r \in \text{REL}(\{ \text{Name}, \text{Alter}, \text{Haarfarbe} \}) \), \\* aber \( r \not \in \text{REL}(\{ \text{Name}, \text{Vorname} \}) \))
-	\item \underline{Datenbankschema}: \( = S = \{ R_1, \dots, R_p \} \) \\* Menge von Relationenschemata
-	\item \underline{Datenbank} (über \( S \)): Menge von Relationen \\* \( d = \{ r_1, \dots, r_p \} \) und \( r_i(R_i) \) \\* \( d(S) \) Datenbank \( d \) über \( S \)
+	\item \underline{REL}: \( \text{REL}(R) = \{ r \mid r(R) \} \) \\* Menge aller Relationen über \( R \) sind \\* (\( r \) oben: \( r \in \text{REL}(\{ \text{Name}, \text{Alter}, \text{Haarfarbe} \}) \), \\* aber \( r \not \in \text{REL}(\{ \text{Name}, \text{Vorname} \}) \))
+	\item \underline{Datenbankschema}: \( S = \{ R_1, \dots, R_p \} \) \\* Menge von Relationenschemata
+	\item \underline{Datenbank} (\( d \) über \( S \)): Menge von Relationen \\* \( d = \{ r_1, \dots, r_p \} \) und \( r_i(R_i) \) \\* \( d(S) \) Datenbank \( d \) über \( S \)
 \end{items}
 
 \textbf{Lokale Integritätsbedingung}
 \begin{items}
-	\item = Abbildung aller möglichen Relationen zu einem Schema auf \lstinline{true} oder \lstinline{false}
-	\item \( b:\{ r \mid r(R) \} \to \{ \) \lstinline{true}, \lstinline{false} \( \} \ (b \in B) \)
+	\item Abbildung aller möglichen Relationen zu einem Schema auf \lstinline{true} oder \lstinline{false}
+	\item \( b: \text{REL}(R) \to \{ \) \lstinline{true}, \lstinline{false} \( \} \ (b \in B) \)
 	\item \underline{Erweitertes Relationenschema}: \( \mathcal{R} = (R, B) \)
 	\item Abkürzung: \\* \( r(R) \) -- \( r \) ist Relation von \( R \) \\* \( r(\mathcal{R}) \) -- \( r \) ist Relation von \( R \), und \( b(r)= \) \lstinline{true} für alle \( b \in B \)
 	\item \underline{SAT}: \( \text{SAT}_R(B) = \{ r \mid r(\mathcal{R}) \} \) \\* Menge aller Relationen über erweitertem Relationenschema (SAT = \emph{satisfy})
+\end{items}
+
+\textbf{Schlüssel}
+\begin{items}
+	\item Schlüssel und Fremdschlüssel einzige Integritätsbedingungen im relationalen Modell
+	\item Schlüssel: Minimale identifizierende Attributmenge
+	\item i.A. mehrere Schlüsselkandidaten, ein ausgezeichneter Primärschlüssel
+	\item Fremdschlüssel \( X(R_1) \to Y(R_2) \): \\*
+	\( \{ t(X) \mid t \in r_1 \} \subset \{ t(Y) \mid t \in r_2 \}  \) und $Y$ ist Schlüssel von $R_2$
 \end{items}
 
 \begin{fragen}

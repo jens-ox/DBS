@@ -17,15 +17,23 @@
 
 \textbf{Relationale Algebra}
 \begin{items}
-	\item \underline{Projektion}: Optimierung: bei vielen Projektionen hintereinander reicht die zuletzt ausgeführte auch allein:
+	\item \underline{Projektion} $\pi$: Optimierung: bei vielen Projektionen hintereinander reicht die zuletzt ausgeführte auch allein:
 		\\*
 		\( \pi \)\lstinline{[KName](}\( \pi \)\lstinline{[KName, Land](Kuenstler))} \( \leadsto \) \( \pi \)\lstinline{[KName](Kuenstler)}
-	\item \underline{Selektion}: Optimierung: Selektionen lassen sich beliebig vertauschen, manchmal auch Projektion und Selektion
-	\item \underline{Verbund}: Kommutativ, Assoziativ
+	\item \underline{Selektion} $\sigma$: Optimierung: Selektionen lassen sich beliebig vertauschen, manchmal auch Projektion und Selektion
+	\item \underline{Verbund} $\bowtie$: Kommutativ, Assoziativ (Aber: Ausführungsreihenfolge kann erhebliche Performance-Unterschiede erzeugen)
 		\\*
-		Nested-Loop Join: Teuer, da pro Eintrag links über alle rechten Einträge iteriert wird
+		\textbf{Nested-Loop Join}: Teuer ($O(n * m)$), da pro Eintrag links über alle rechten Einträge iteriert wird. \\*
+		Besser: \textbf{Bock-Nested-Loop Join }(Arbeitsspeicher ausnutzen)
 		\\*
-		Merge Join: Beide Relationen sortieren, dann Eintrag für Eintrag
+		\textbf{Merge Join}: Beide Relationen sortieren, dann Eintrag für Eintrag Merge-Technik anwenden (linear wenn X Schlüssel)
+\end{items}
+
+\textbf{Logische vs. physische Operatoren}
+\begin{items}
+	\item DBS enthält meist mehrere pysische Operatoren und Implementierungen für den gleichen logsichen Operator
+	\item DBS sucht selbst den optimalen pysischen Operator heraus
+	\item Pysische Operatoren können dabei mehrere logische Operatoren zusammenfassen
 \end{items}
 
 \textbf{Blockierende/Nichtblockierende Operatoren}
@@ -35,7 +43,7 @@
 
 \textbf{Histogramme}
 \begin{items}
-	\item Zeigt Auftrittshäufigkeit eines Intervalls
+	\item Zeigt Auftrittshäufigkeit eines Intervalls (Bucket)
 	\item \underline{Equi-Width-Histogramm}: Breite aller Buckets gleich
 	\item \underline{Equi-Depth-Histogramm}: Auftrittshäufigkeit aller Buckets gleich
 	\item Nützlich bei ein-Attribut-Anfragen, sonst nicht so:
@@ -56,28 +64,15 @@
 		``Antwort innserhalb von 300ms für 99,9\% der Aufrufe bei 500 Zugriffen pro Sekunde''
 \end{items}
 
-\textbf{Zustände}
-\begin{items}
-	\item \underline{Zustandslos}: z.B. Umrechnungsdienst
-	\item \underline{Zustandsbehaftet}: z.B. Ausführung Geschäftsprozess
-\end{items}
-
-\textbf{Quorum}
+\textbf{Quorum Consensus}
 \begin{items}
 	\item Szenario: Replikation mit \( n \) Knoten
 		\\*
-		\( \leadsto \) Wie Konsistenz sicherstellen? Was, wenn nicht alle Knoten verfügbar?
-	\item \underline{Quorum Consensus}:
-		\\*
-		Lesen: Lese Mindestanzahl von Versionen (\( R \)), nehme aktuelle
-		\\*
-		Schreiben: Aktualisiere Mindestanzahl von Kopien (\( W \))
-		\\*
-		\( \leadsto \) Für Lesen/Schreiben muss eine festgelegte Anzahl an Knoten zustimmen. Forderungen (\( N \) = Anzahl Knoten):
-		\begin{enumeration}
-			\item \( Q_R+Q_W > N \)
-			\item \( 2Q_W > N \)
-		\end{enumeration}
+		\( \leadsto \) Wie strenge Konsistenz beim Schreiben sicherstellen? Was, wenn nicht alle Knoten verfügbar?
+	\item Lesen: Lese Mindestanzahl von Versionen (\( R \)), nehme aktuelle
+	\item Schreiben: Aktualisiere Mindestanzahl von Kopien (\( W \))
+	\item Jede Kopie erhält Versionsnummer
+	\item Üblich ist \( Q_R+Q_W > N \)
 \end{items}
 
 \newpage
@@ -93,13 +88,15 @@
 		(put, get)-Interface
 		\\*
 		Zu Größe des Schlüsselraums logarithmischer Suchaufwand
-	\item Beispiel: Chord
-		\\*
-		Zentrale Datenstruktur: \emph{identifier circle}, \emph{chord ring}
+	\item Beispiel: \textbf{Chord} \\*
+		Zentrale Datenstruktur: \emph{identifier circle}, \emph{chord ring}\\*
+		Schlüssel $k$ gehört zum im Uhrzeigersinn nächsten Knoten\\*
+		Einfaches Hinzufügen / Entfernen von Knoten möglich
 		\\* Suche: Jeder Knoten hat \emph{finger table}, \emph{i}-ter Eintrag von Knoten \( n \): successor(\( n+2^{i-1} \)) (\( m \) Anzahl Bits)
 	\begin{figure}[H]\centering\label{Chord}\includegraphics[width=0.25\textwidth]{Chord}\end{figure}
 	\item Replikation über \emph{chained replication}: Schlüssel nicht nur bei einem Knoten, sondern auch bei \( k \) Nachfolgern einfügen
 	\item \underline{Heterogenität}: Knoten können unterschiedlich leistungsstark sein (ggf. unterschiedliche Zuständigkeitsbereiche, unterschiedliche Last)
+	\item Umrechnen von Anwendungs- in Systemschlüssel, um Last zu verteilen (gleich / ungleich, evtl. auf mehrere Positionen)
 \end{items}
 
 \textbf{Dynamo}
@@ -117,14 +114,22 @@
 	\item Ziel: eventual consistency
 	\item Liste von (Knoten, Zähler)-Paaren (eine Liste pro Version) \( \leadsto \) Erfassung der Zusammenhönge zwischen Versionen
 	\item Quorum-basierte Techniken \( \leadsto \) Inkonsistenzen vermeiden
-	\item vector clock-basierte Techniken \( \leadsto \) Inkonsistenzen erkennen und auflösen
-	\item Unterschiedliche Knoten können Schreiboperationen absetzen \\* \( \leadsto \) Differenzierung
-	\item Version 1 ist Vorgänger von Version 2, wenn jeder Zähler in List von V1 einen kleineren Wert hat als in der von V2
+	\item Vector-Clock-basierte Techniken \( \leadsto \) Inkonsistenzen erkennen und auflösen
+	\item Unterschiedliche Knoten können Schreiboperationen absetzen \\* \( \leadsto \) Eine Liste von (Knote, Zähler)-Paaren pro Version
+	\item Version 1 ist Vorgänger von Version 2, wenn jeder Zähler in Liste von V1 einen kleineren Wert hat als in der von V2
 	\item Update (put) muss festlegen, welche Version aktualisiert werden soll
 	\item Get gibt i.A. mehrere Versionen zurück
+	\item Kombination mit \textbf{Sloppy Quorum}: \( Q_R+Q_W < N \)
 \end{items}
 
 \newpage
+
+\textbf{Datenbanktechnologie auf Dynamo}
+\begin{items}
+	\item Dynamo kein DBS im klassischen Sinn: Niedrigere Schnittstelle für Anwendungsentwicklung
+	\item Aber: Bessere nichtfunktionale Eigenschaften
+	\item Im Folgenden: Ansätze für DBS 'On Top of' Dynamo
+\end{items}
 
 \textbf{Scale Independence}
 \begin{items}
@@ -135,13 +140,14 @@
 	\begin{enumeration}
 		\item Klasse I (konstant):
 			\\*
-			z.B. ID-basierter Zugriff, \lstinline[language=sql]{LIMIT}-beschränkte Anfragen2
+			z.B. Schlüssel-Zugriff, \lstinline[language=sql]{LIMIT}-beschränkt, Paginierung\\*
+			Join auf Fremdschlüssel
 		\item Klasse II (beschränkt):
 			\\*
 			Explizite Begrenzung liegt vor
 			\\*
 			Als Kardinalität im erweiterten DB-Schema darstellbar
-		\item Klasse III ((sub-)linear):
+		\item Klasse III (linear / sublinear):
 			\\*
 			z.B. Ausgabe aller Kunden/Produkte
 		\item Klasse IV (superlinear):
@@ -151,13 +157,6 @@
 	\item \( \leadsto \) \textbf{PIQL} (\emph{performance insightful query language}) - Scale Independent durch Erweiterungen und Beschränkungen der Anfragesprache
 \end{items}
 
-\textbf{Ergebnisgröße}
-\begin{items}
-	\item Wie bestimmte Größe des Anfrageergebnisses garantieren?
-		\\*
-		\( \leadsto \) \lstinline[language=sql]{LIMIT}, Pagination, Berücksichtigung von Fremdschlüsselbeziehungen, Erweiterung DB-Schema um Kardinalitäten
-\end{items}
-
 \textbf{Physische Optimierung}
 \begin{items}
 	\item Zwei Arten von physischen Operatoren:
@@ -165,10 +164,11 @@
 		\item \emph{remote operator}: Zugriffe auf key-value store und elementare Verarbeitungsschritte
 		\item Client-seitige Operatoren für Query-Logik
 	\end{enumeration}
-	\item Remote Operator: Muss explizite Beschränkung der Größe des Zwischenergebnisses enthalten (i.A. \lstinline{stop}-Operator in Operator-Darstellung)
+	\item Remote Operator: Muss explizite Beschränkung der Größe (und damit der Ausführungsdauer) des Zwischenergebnisses enthalten (i.A. \lstinline{dataStop}-Operator; Fehlermeldung und Nichtausführung wenn dies nicht der Fall ist)
 	\item Remote-Operatoren:
 	\begin{enumeration}
-		\item \textbf{IndexScan}: Prädikat muss zusammenhängendem Ausschnitt des indexierten Wertebereichs entsprechen, ``Sort'' muss Sortierreihenfolge des Index sein
+		\item \textbf{IndexScan}: Prädikat muss zusammenhängendem Ausschnitt des indexierten Wertebereichs entsprechen,\\*
+		``Sort'' muss Sortierreihenfolge des Index sein
 		\item \textbf{IndexForeignKeyJoin}: Beschränkung durch Fremdschlüsseleigenschaft \( \leadsto \) kein logischer Stop-Operator, linker Teilausdruck enthält Fremdschlüssel
 		\item \textbf{SortedIndexJoin}: Bei Sortierung des Inputs nach Join Key lässt sich aus limit hint-Begrenzuung der Anzahl an Datenobjekten pro Schlüssel ableiten
 	\end{enumeration}
@@ -179,7 +179,7 @@
 	\item SLO = \emph{serivce-level objectives}
 	\item Größenbeschränkung Zwischenergebnisse noch keine Garantie für insgesamt beschränkten Aufwand
 	\item Wenn anliegende Last sehr groß kann IndexScan-Ausführung beliebig lange dauern
-	\item Lookup über Zufallsverteilung (Parameter Tupelgröße, Anzahl erwarteter Tupel)
+	\item Histogramm-Lookup über Zufallsverteilung (Tupelgröße, Anzahl erwarteter Tupel)
 \end{items}
 
 \begin{fragen}
