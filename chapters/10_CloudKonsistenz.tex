@@ -1,0 +1,34 @@
+\section{Cloudsysteme --- Konsistenz}
+\label{sec:cloudkonsistenz}
+
+\paragraph{Verteilung}
+\begin{items}
+	\item \textbf{Vorteile} (scheinbar): \\*
+		+ Leselastverteilung \\*
+		+ Beschleunigung (durch höhere Lokalität) \\*
+		+ Höhere Ausfallsicherheit
+	\item \textbf{Nachteile}: \\*
+		- Transaktionen müssen auf Knoten gleich angeordnet sein \\*
+		- Widerspruchsfreie Anordnungsentscheidungen nötig für Konfliktfreiheit \( \leadsto \) schlechte Skalierbarkeit \\*
+		- Für Konsistenz müssen alle Knoten verfügbar sein \( \leadsto \) geringere Ausfallsicherheit
+	\item \( \leadsto \) Netzwerkpartitionierung
+	\item \textbf{CAP-Theorem}: Wenn Netzwerkpartitionierung möglich, dann sind hohe Verfügbarkeit und Datenbestandskonsistenz unvereinbar
+\end{items}
+
+\paragraph{Eventual Consistency}
+\begin{items}
+	\item ``Wenn ab Zeitpunkt keine Änderungen mehr, dann werden irgendwann alle Lesezugriffe gleichen Wert zurückliefern''
+	\item Alternativ: ``\dots dann werden irgendwann alle Lesezugriffe zuletzt geschriebenen Wert zurückliefern''
+	\item Beispiel (social network): Netzwerkpartition
+	\begin{items}
+		\item Starke Konsistenz: Vorübergehend keine Postings möglich
+		\item Eventual Consistency: User kann Posting schreiben, Follower sehen es sobald möglich
+	\end{items}
+\end{items}
+
+\begin{fragen}
+	\item Geben Sie die Probleme mit dem klassischen, starken Konsistenzbegriff im verteilten Fall wieder.
+	\item Bekommt man mit \emph{eventual consitency} irgendeine Form von Sicherheit? Begründen Sie Ihre Antwort.
+	\item Warum kann man im Bank-Kontext in manchen Situationen doch auf starke, klassische Konsistenz verzichten?
+	\item Geben Sie ein weiteres Beispiel für eine Folge von Operationen, deren Anordnung egal ist.
+\end{fragen}

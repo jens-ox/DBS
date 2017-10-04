@@ -1,29 +1,29 @@
 \section{Relationale Datenbanksprachen}
 \label{sec:sql}
 
-\textbf{SQL-Kern}
+\paragraph{SQL-Kern}
 \begin{items}
-	\item \underline{select} \\*
+	\item \textbf{select} \\*
 		Projektionsliste \\*
 		Attribute, arithmetische Ausdrücke, Aggregatfunktionen \\*
-		\textbf{select distinct}: keine Dopplungen\\*
+		\emph{select distinct}: keine Dopplungen\\*
 		Umbenennungen: \lstinline[language=sql]{select Preis * 1.44 as DollarPreis }
-	\item \underline{from} \\*
+	\item \textbf{from} \\*
 		Zu verwendende Relationen, Umbenennungen\\*
 		Orthogonalität: Wiederum SFW-Block möglich\\*
 		\lstinline[language=sql]{select * from (select [...]) where [...] }
-	\item \underline{where} \\*
+	\item \textbf{where} \\*
 		Selektions- und Verbundbedingungen, \\*
 		geschachtelte Anfragen (wieder SFW-Block)
-	\item \underline{group by} \\*
+	\item \textbf{group by} \\*
 		Gruppierung für Aggregatfunktionen
-	\item \underline{having} \\*
+	\item \textbf{having} \\*
 		Selektionsbedingungen an Gruppen
 \end{items}
 
-\textbf{from - Mehrere Relationen}
+\paragraph{from --- Mehrere Relationen}
 \begin{items}
-	\item Bei mehr als einer Relation: \textbf{Kartesisches Produkt}
+	\item Bei mehr als einer Relation: \emph{Kartesisches Produkt}
 	\item Kommagetrennt oder als expliziter Operator:
 	\begin{lstlisting}[language=sql]
 select * from Kuenstler K, Titel T
@@ -31,7 +31,7 @@ select * from Kuenstler cross join Titel
 	\end{lstlisting}
 \end{items}
 
-\textbf{Natürlicher Verbund}
+\paragraph{Natürlicher Verbund}
 \begin{items}
 	\item Automatischer Equi-Join auf allen übereinstimmenden Spalten, diese erscheinen nur ein mal in der Ergebnisrelation
 	\begin{lstlisting}[language=sql]
@@ -39,7 +39,7 @@ select * from Kuenstler natural join Titel
 	\end{lstlisting}
 \end{items}
 
-\textbf{Theta-Join}
+\paragraph{Theta-Join}
 \begin{items}
 	\item Verbund über Verbundsbedingungen
 	\begin{lstlisting}[language=sql]
@@ -49,13 +49,13 @@ select * from Kuenstler
 	\item Beispiel: \(  \text{Auto} \bowtie_{AutoPreis > BootPreis} \text{Boot} \)
 \end{items}
 
-\textbf{Outer, Left, Right Join}
+\paragraph{Outer, Left, Right Join}
 \begin{items}
 	\item Dangling Tuples übernehmen und mit Nullwerten füllen
 	\begin{figure}[H]\centering\label{SQLJoin}\includegraphics[width=0.4\textwidth]{SQLJoin}\end{figure}
 \end{items}
 
-\textbf{Self-Join}
+\paragraph{Self-Join}
 \begin{items}
 	\item Kartesisches Produkt einer Tabelle mit selbst
 	\begin{lstlisting}[language=sql] 
@@ -69,9 +69,9 @@ eins.Name, eins.Vorname, zwei.Name, zwei.Vorname
 	\item Anwendungen: Vergleichen oder Zählen von Wertemengen
 \end{items}
 
-\newpage
 
-\textbf{where}
+
+\paragraph{where}
 \begin{items}
 	\item Konstanten-Selektion: \\*
 	\lstinline[language=sql]{select * from Buecher where Buecher.Titel = "Titel"}
@@ -83,12 +83,12 @@ select Buecher.Titel, Buecher_Stichwort.Stichwort
 	\end{lstlisting}
 	\item \lstinline[language=sql]{like}: Ungewissheitsselektion
 	(\lstinline[language=sql]{where name like "C\%"})\\*
-	'\%' -- Beliebig viele Zeichen $\qquad$ '\_' -- Genau ein Zeichen
+	'\%' --- Beliebig viele Zeichen $\qquad$ '\_' --- Genau ein Zeichen
 	\item \lstinline[language=sql]{and, or, not, is null}
 	\item \lstinline[language=sql]{in}: \lstinline[language=sql]{where ISBN in (select ISBN from Empfiehlt)}
 \end{items}
 
-\textbf{Verzahnt geschachtelte Anfragen}
+\paragraph{Verzahnt geschachtelte Anfragen}
 \begin{items}
 	\item In der inneren Anfrage Attribute aus der äußeren verwenden
 	\begin{lstlisting}[language=sql]
@@ -104,7 +104,7 @@ where exists (select * from Ausleihe
 	\end{lstlisting}
 \end{items}
 
-\textbf{Mengenoperationen}
+\paragraph{Mengenoperationen}
 \begin{items}
 	\item Übernimmt Attributnamen des linken Operanden
 	\item Vereinigung
@@ -117,7 +117,7 @@ select A, B, C from R1 union [all]
 	\item Durchschnitt: \lstinline[language=sql]{intersect}
 \end{items}
 
-\textbf{Aggregatfunktionen}
+\paragraph{Aggregatfunktionen}
 \begin{items}
 	\item Prinzip: Berechnung eines Werts aus Werten eines Attributs\\*
 		\lstinline[language=sql]{ sum([all / distinct] Attributname) }
@@ -126,7 +126,7 @@ select A, B, C from R1 union [all]
 	\item Modifikatoren: \lstinline[language=sql]{all / distinct} (Voreinstellung: all)
 \end{items}
 
-\textbf{Group by}
+\paragraph{Group by}
 \begin{items}
 	\item Gruppierung G: Für gleiche G-Werte werden Resttupel in Relation gesammelt, darauf dann Aggregatfunktionen angewendet
 	\item
@@ -135,7 +135,7 @@ select Marke, sum(Anzahl)
 	from Zulassungen
 	group by Marke
 	\end{lstlisting}
-	\item \textbf{Wichtig:} Jedes Select-Attribut muss entweder Gruppiert oder Aggregiert werden!
+	\item \emph{Wichtig:} Jedes Select-Attribut muss entweder Gruppiert oder Aggregiert werden!
 	\item \lstinline[language=sql]{having}: Bedingung auf gruppierter Relation
 	\begin{lstlisting}[language=sql]
 select PANr, sum(Entlohnung)
@@ -152,9 +152,9 @@ select Matrikelnr from Pruefung
 	\end{lstlisting}
 \end{items}
 
-\newpage
 
-\textbf{Quantoren}
+
+\paragraph{Quantoren}
 \begin{items}
 	\item \lstinline[language=sql]{any/some} (äquivalent):
 	\begin{lstlisting}[language=sql]
@@ -172,7 +172,7 @@ select Name from Kunde, Bestellung
 	\item Aber: Anwendbarkeit eingeschränkt, z.B. kein Vergleich auf Mengengleichheit
 \end{items}
 
-\textbf{order by}
+\paragraph{order by}
 \begin{items}
 	\item Menge von Tupeln $\leadsto$ Sortierte Liste
 	\begin{lstlisting}[language=sql]
@@ -181,21 +181,21 @@ select MatNr, Note from Prueft
 	order by Note [asc / desc], MatNr
 	\end{lstlisting}
 	\item Aufsteigend (\lstinline[language=sql]{asc}, Standard) oder Absteigend (\lstinline[language=sql]{desc})
-	\item \textbf{Wichtig}: Sortier-Attribut(e) müssen in Select vorkommen!\\*
+	\item \emph{Wichtig}: Sortier-Attribut(e) müssen in Select vorkommen!\\*
 	Denn: Sortierung wird auf das Ergebnis der vorherigen SFW-Anfrage angewendet.
 \end{items}
 
-\textbf{Nullwerte}
+\paragraph{Nullwerte}
 \begin{items}
 	\item Vergleiche mit Nullwert: \lstinline[language=sql]{unknown} statt \lstinline[language=sql]{true} oder \lstinline[language=sql]{false} \\*
 	\( \leadsto A=A \) keine Tautologie!
-	\item Deshalb \textbf{nicht gleich}: \lstinline[language=sql]{select * from Person} und \\* \lstinline[language=sql]{select * from Person where Name = Name}\\*
+	\item Deshalb \emph{nicht gleich}: \lstinline[language=sql]{select * from Person} und \\* \lstinline[language=sql]{select * from Person where Name = Name}\\*
 	(Letzteres eliminiert Tupel mit Name = null)
 \end{items}
 
-\textbf{Änderungsoperationen}
+\paragraph{Änderungsoperationen}
 \begin{items}
-	\item \textbf{Insert}
+	\item \emph{Insert}
 	\begin{lstlisting}[language=sql]
 insert into relation [(attribut1, ...)]
 	values (wert1, ...)
@@ -206,32 +206,28 @@ insert into relation [(attribut1, ...)]
 insert into Kunde (select LName, LAdr, 0 from Lieferant)
 	\end{lstlisting}
 	
-	\item \textbf{Update}
+	\item \emph{Update}
 	\begin{lstlisting}[language=sql]
 update relation set attribut1 = wert, ... 
 	[where bedingung]
 	\end{lstlisting}
 	
-	\item \textbf{Delete}
+	\item \emph{Delete}
 	\begin{lstlisting}[language=sql]
 delete from relation [where bedingung]
 	\end{lstlisting}
 \end{items}
 
 \begin{fragen}
-	\begin{enumeration}
-		\item Formulieren diverser (komplexer) SQL-Anfragen
-		\item Vorgegebene geschachtelte Anfrage als nicht-geschachtelte schreiben
-		\item Welche Join-Varianten kennen Sie?
-		\item Geben Sie ein Beispiel an, in dem ein Self-Join sinnvoll ist.
-		\item Was ist der Zusammenhang zwischen Vereinigung und Outer Join?
-		\item Was ist eine Umbenennung im SQL-Kontext? Wann wird sie gebraucht?
-		\item Geben Sie ein sinnvolles Beispiel für eine Anfrage an, die eine having-Klausel hat.
-		\item Geben Sie ein Bespiel für eine Anfrage mit einer having-Klausel an, bei der man
-		\begin{enumeration}
-			\item die Klausel durch eine where-Klausel ersetzen kann,
-			\item das nicht kann.
-		\end{enumeration}
-		\item Erläutern Sie, warum im SQL-Kontext ``A==A'' keine Tautologie ist.
-	\end{enumeration}
+	\item Formulieren diverser (komplexer) SQL-Anfragen
+	\item Vorgegebene geschachtelte Anfrage als nicht-geschachtelte schreiben
+	\item Welche Join-Varianten kennen Sie?
+	\item Geben Sie ein Beispiel an, in dem ein Self-Join sinnvoll ist.
+	\item Was ist der Zusammenhang zwischen Vereinigung und Outer Join?
+	\item Was ist eine Umbenennung im SQL-Kontext? Wann wird sie gebraucht?
+	\item Geben Sie ein sinnvolles Beispiel für eine Anfrage an, die eine having-Klausel hat.
+	\item Geben Sie ein Bespiel für eine Anfrage mit einer having-Klausel an, bei der man \\*
+		- die Klausel durch eine where-Klausel ersetzen kann, \\*
+		- das nicht kann.
+	\item Erläutern Sie, warum im SQL-Kontext ``A==A'' keine Tautologie ist.
 \end{fragen}

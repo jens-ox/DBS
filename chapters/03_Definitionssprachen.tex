@@ -1,51 +1,47 @@
 \section{Datenbank-Definitionssprachen}
 \label{sec:definitionssprachen}
 
-\textbf{Gewinnung der Konventionen}
+\paragraph{Gewinnung der Konventionen}
 \begin{items}
 	\item Beschränkte Anwendungswelt (= Miniwelt, relevanter Weltausschnitt, Diskursbereich)
-	\item \underline{Daten}: Modelle (gedankliche Abstraktionen) der Miniwelt
-	\item \underline{Datenbasiskonsistenz}: Datenbasis ist bedeutungstreu, wenn ihre Elemente Modelle einer gegebenen Miniwelt sind (schärfste Konsistenzforderung)
+	\item \textbf{Daten}: Modelle (gedankliche Abstraktionen) der Miniwelt
+	\item \textbf{Datenbasiskonsistenz}: Datenbasis ist bedeutungstreu, wenn ihre Elemente Modelle einer gegebenen Miniwelt sind (schärfste Konsistenzforderung)
 \end{items}
 
-\textbf{Datenbankentwurf -- Phasenmodell}
+\paragraph{Datenbankentwurf --- Phasenmodell}
 \begin{figure}[H]\centering\label{Phasenmodell}\includegraphics[width=0.33\textwidth]{Phasenmodell}\end{figure}
 
-\textbf{Datenbankentwurf -- Modellierung}
+\paragraph{Datenbankentwurf --- Modellierung}
 \begin{items}
 	\item Ausschnitt der Wirklichkeit mit Schema beschreiben
 	\item Typen = Struktur der Entitäten
 	\item Welche Konsistenzbedingungen sind sinnvoll?
-	\item \underline{Schemakonsistenz}: Einhaltung der durch Schema vorgegebenen Konsistenzbedingungen (= von DBMS überprüfbar! )
+	\item \textbf{Schemakonsistenz}: Einhaltung der durch Schema vorgegebenen Konsistenzbedingungen (= von DBMS überprüfbar! )
 \end{items}
 
-\textbf{SQL}
+\paragraph{SQL}
 \begin{items}
 	\item = standardisierte Sprache für DB-Zugriff (relational)
-	\item Aspekte:
-	\begin{enumeration}
-		\item Schemadefinition
-		\item Datenmanipulation (Einfügen, Löschen, Ändern)
-		\item Anfragen
-	\end{enumeration}
+	\item Aspekte: \\*
+		- Schemadefinition \\*
+		- Datenmanipulation (Einfügen, Löschen, Ändern) \\*
+		- Anfragen
 \end{items}
 
-\newpage
 
-\textbf{SQL -- SQL-DDL}
+
+\paragraph{SQL --- SQL-DDL}
 \begin{items}
 	\item = \emph{SQL data definition language}
-	\item Teilbereich von SQL, der zu tun hat mit Definition von:
-	\begin{enumeration}
-		\item Typen
-		\item Wertebereichen
-		\item Relationsschemata
-		\item Integritätsbedingungen
-	\end{enumeration}
+	\item Teilbereich von SQL, der zu tun hat mit Definition von: \\*
+		- Typen \\*
+		- Wertebereichen
+		- Relationsschemata \\*
+		- Integritätsbedingungen
 \end{items}
 
-\textbf{SQL -- als Definitionssprache}
-\begin{enumeration}
+\paragraph{SQL --- als Definitionssprache}
+\begin{items}
 	\item Externe Ebene: 
 		\begin{lstlisting}[language=sql]
 { create | drop } view;
@@ -59,16 +55,16 @@
 			\begin{lstlisting}[language=sql]
 { create | alter | drop } index;
 		\end{lstlisting}
-\end{enumeration}
+\end{items}
 
-\textbf{Data Dictionary}
+\paragraph{Data Dictionary}
 \begin{items}
 	\item Verzeichnis der vorhandenen Tabellen und Sichten
 	\item Selbst wie eine Datenbank aufgebaut
 	\item Enthält keine Anwendungsdaten, sondern Struktur-Metadaten
 \end{items}
 
-\textbf{SQL -- Tabelle anlegen}
+\paragraph{SQL --- Tabelle anlegen}
 \begin{items}
 	\item \begin{lstlisting}[language=sql]
 create table Kuenstler
@@ -78,7 +74,7 @@ create table Kuenstler
 \end{lstlisting}
 \end{items}
 
-\textbf{SQL -- Wertebereiche}
+\paragraph{SQL --- Wertebereiche}
 \begin{items}
 	\item \lstinline[language=sql]{integer} (auch \lstinline[language=sql]{int})
 	\item \lstinline[language=sql]{smallint}
@@ -90,7 +86,7 @@ create table Kuenstler
 	\item \lstinline[language=sql]{date}, \lstinline[language=sql]{time}, \lstinline[language=sql]{timestamp}
 \end{items}
 
-\textbf{Wertebereiche -- Custom}
+\paragraph{Wertebereiche --- Custom}
 \begin{items}
 	\item \begin{lstlisting}[language=sql]
 create domain Gebiete varchar(20)
@@ -103,10 +99,10 @@ create table Vorlesungen
 \end{lstlisting}
 \end{items}
 
-\textbf{Integritätsbedingungen}
+\paragraph{Integritätsbedingungen}
 \begin{items}
 	\item Schlüssel kann aus mehreren Attributen bestehen
-	\item \underline{Fremdschlüssel}: \begin{lstlisting}[language=sql]
+	\item \textbf{Fremdschlüssel}: \begin{lstlisting}[language=sql]
 create table Titel
   (TITLEID integer not null, NAME varchar(200), 
    KID integer, primary key (TITLEID), 
@@ -122,9 +118,9 @@ create table Vorlesungen
 \end{lstlisting}
 \end{items}
 
-\newpage
 
-\textbf{SQL -- alter und drop}
+
+\paragraph{SQL --- alter und drop}
 \begin{items}
 	\item \begin{lstlisting}[language=sql]
 alter table Lehrstuehle
@@ -136,37 +132,33 @@ alter table Lehrstuehle
 drop spaltenname { restrict | cascade }
 drop table basisrelationenname { restrict | cascade }
 \end{lstlisting}
-\item \( \leadsto \) Attribut / Tabelle löschen, dabei gilt:
-\begin{enumeration}
-	\item \lstinline[language=sql]{restrict}: keine Sichten/Integritätsbedingungen mit diesem Attribut definiert wurden
-	\item \lstinline[language=sql]{cascade}: gleichzeitig diese Schichten/Integritätsbedingungen mitgelöscht werden sollen
-\end{enumeration}
+\item \( \leadsto \) Attribut / Tabelle löschen, dabei gilt: \\*
+	- \lstinline[language=sql]{restrict}: keine Sichten/Integritätsbedingungen mit diesem Attribut definiert wurden \\*
+	- \lstinline[language=sql]{cascade}: gleichzeitig diese Schichten/Integritätsbedingungen mitgelöscht werden sollen
 \end{items}
 
-\textbf{Speicherhierarchie}
+\paragraph{Speicherhierarchie}
 \begin{figure}[H]\centering\label{Speicherhierarchie}\includegraphics[width=0.33\textwidth]{Speicherhierarchie}\end{figure}
 
-\textbf{Index}
+\paragraph{Index}
 \begin{items}
 	\item Für mehrere Attribute möglich
 	\item Index für (gpa, name) \( \neq \) Index für (name, gpa)
 	\item Index kann nachträglich angelegt bzw. gelöscht werden, ohne Daten selbst zu löschen
 	\item Index Bestandteil der physischen Ebene, Index-Definition Teil des internen Schemas
-	\item \lstinline[language=sql]{select name from Student where gpa > 4} liefert Ergebnis unabhängig von Existenz eines Index -- wenn vorhanden erhebliche Beschleunigung
+	\item \lstinline[language=sql]{select name from Student where gpa > 4} liefert Ergebnis unabhängig von Existenz eines Index --- wenn vorhanden erhebliche Beschleunigung
 	\item \lstinline[language=sql]{create [unique] index typ on auto(hersteller, modell, baujahr)} \\* hilft bei Herstellersuche, weniger bei Suche nach Baujahr
 	\item Unique Index zur Simulation von Schlüsselbedingungen
 \end{items}
 \begin{figure}[H]\centering\label{Index}\includegraphics[width=0.33\textwidth]{Index}\end{figure}
 
 \begin{fragen}
-	\begin{enumeration}
-		\item Erläutern Sie anhand eines Anwendungsbeispiels, warum man die Menge der zulässigen Zustände einschränken will.
-		\item Was ist Schema-Konsistenz, Datenbasis-Konsistenz?
-		\item Was ist ein (DB-)Schema?
-		\item Was ist das Data Dictionary?
-		\item Warum sollte man sich die Mühe machen, Integritätsbedingungen als Teil des DB-Schemas zu formulieren?
-		\item Sind Integritätsbedingungen Bestandteil des internen oder des konzeptuellen Schemas? Begründen Sie Ihre Antwort.
-		\item Wieso sind Indices Bestandteil des internen und nicht des konzeptuellen Schemas?
-		\item Geben Sie Beispiele für DB-Features an, die zeigen, dass DB-Systeme physische Datenunabhängigkeit nicht vollständig umsetzen.
-	\end{enumeration}
+	\item Erläutern Sie anhand eines Anwendungsbeispiels, warum man die Menge der zulässigen Zustände einschränken will.
+	\item Was ist Schema-Konsistenz, Datenbasis-Konsistenz?
+	\item Was ist ein (DB-)Schema?
+	\item Was ist das Data Dictionary?
+	\item Warum sollte man sich die Mühe machen, Integritätsbedingungen als Teil des DB-Schemas zu formulieren?
+	\item Sind Integritätsbedingungen Bestandteil des internen oder des konzeptuellen Schemas? Begründen Sie Ihre Antwort.
+	\item Wieso sind Indices Bestandteil des internen und nicht des konzeptuellen Schemas?
+	\item Geben Sie Beispiele für DB-Features an, die zeigen, dass DB-Systeme physische Datenunabhängigkeit nicht vollständig umsetzen.
 \end{fragen}

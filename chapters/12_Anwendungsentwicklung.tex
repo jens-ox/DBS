@@ -1,25 +1,23 @@
 \section{Anwendungsentwicklung}
 \label{sec:anwendungeentwicklung}
 
-\textbf{Client-Server-Architektur}
+\paragraph{Client-Server-Architektur}
 \begin{figure}[H]\centering\label{ClientServer}\includegraphics[width=0.25\textwidth]{ClientServer}\end{figure}
 \begin{items}
-	\item Erfordert
-	\begin{enumeration}
-		\item Kenntnis über angebotene Dienste
-		\item Protokoll zur Regelung der Interaktion
-	\end{enumeration}
+	\item Erfordert \\*
+		- Kenntnis über angebotene Dienste \\*
+		- Protokoll zur Regelung der Interaktion
 \end{items}
 
-\textbf{Zwei Schichten-Architektur}
+\paragraph{Zwei Schichten-Architektur}
 \begin{figure}[H]\centering\label{ZweiSchichtenArchitektur}\includegraphics[width=0.33\textwidth]{ZweiSchichtenArchitektur}\end{figure}
 
-\textbf{Drei Schichten-Architektur}
+\paragraph{Drei Schichten-Architektur}
 \begin{figure}[H]\centering\label{DreiSchichtenArchitektur}\includegraphics[width=0.33\textwidth]{DreiSchichtenArchitektur}\end{figure}
 
-\textbf{Anwendungslogik}
+\paragraph{Anwendungslogik}
 \begin{items}
-	\item \underline{Anwendungslogik}: Algorithmen, die anwendungsspezifisches Wissen beinhalten
+	\item \textbf{Anwendungslogik}: Algorithmen, die anwendungsspezifisches Wissen beinhalten
 	\item Personal-DB entählt Mitarbeiter-Daten
 		\\*
 		\( \leadsto \) Anwendung: schlägt Teamleiter für konkrete Projekte vor
@@ -27,18 +25,18 @@
 		\( \leadsto \) Bedeutsamkeit der Fähigkeiten usw. Anwendungsteil
 \end{items}
 
-\textbf{Cursor-Konzept}
+\paragraph{Cursor-Konzept}
 \begin{items}
 	\item Cursor \( \equiv \) Iterator
 	\item Programmiersprachen: einzelne Datenobjekte als zugrundeliegende Struktur
 \end{items}
 
-\newpage
 
-\textbf{Programmiersprachenanbindung}
+
+\paragraph{Programmiersprachenanbindung}
 \begin{figure}[H]\centering\label{Programmiersprachenanbindung}\includegraphics[width=0.33\textwidth]{Programmiersprachenanbindung}\end{figure}
 
-\textbf{Prepared Statements}
+\paragraph{Prepared Statements}
 \begin{items}
 	\item Reduzieren Ausführungszeit, da bereits vorab kompiliert
 	\item
@@ -50,20 +48,20 @@ PreparedStatement updateSales =
 	\item \lstinline[language=java]{upcdateSales.setInt(1,75);}
 \end{items}
 
-\textbf{Gespeicherte Prozeduren}
+\paragraph{Gespeicherte Prozeduren}
 \begin{items}
 	\item In DB-Server verwaltete und ausgeführte Software-Module in Form von Prozeduren/Funktionen
 	\item Aufruf aus Anwendungen/Anfragen heraus
 	\item \( \leadsto \) Weniger Kontextwechsel in Anwendung
 \end{items}
 
-\textbf{Variablen und Typen}
+\paragraph{Variablen und Typen}
 \begin{items}
 	\item \lstinline[language=sql]{DECLARE preis NUMBER;}
 	\item Stellt sicher, dass Attributtyp in DB identisch zu Typ in Programm ist
 \end{items}
 
-\textbf{Kontrollfluss}
+\paragraph{Kontrollfluss}
 \begin{items}
 	\item
 	\begin{lstlisting}[language=sql]
@@ -84,42 +82,38 @@ run;
 	\end{lstlisting}
 \end{items}
 
-\textbf{Performance Anti-Patterns}
+\paragraph{Performance Anti-Patterns}
 \begin{items}
-	\item \underline{Excessive Dynamic Allocation}:
+	\item \textbf{Excessive Dynamic Allocation}:
 		\\*
 		Häufige unnötige Objekterstellung/-zerstörung derselben Klasse
-	\item \underline{The Stifle}:
+	\item \textbf{The Stifle}:
 		\\*
 		Unpassende DB-Schnittstellennutzung
-	\item \underline{Circuitous Treasure Hunt}:
+	\item \textbf{Circuitous Treasure Hunt}:
 		\\*
 		Abfrage von Relation A, damit Relation B abfragen,\dots
-	\item \underline{Sisyphus DB Retrieval}:
+	\item \textbf{Sisyphus DB Retrieval}:
 		\\*
 		Riesige Datenmenge abfragen, obwohl nur wenige Einträge nötig
-	\item \underline{Spaghetti Query}:
+	\item \textbf{Spaghetti Query}:
 		\\*
 		Mehrere Informationsbedürfnisse in einer Anfrage
-	\item \underline{Insufficient Caching}:
+	\item \textbf{Insufficient Caching}:
 		\\*
 		Zu wenig Caching
-	\item \underline{Wrong Caching Strategy}:
+	\item \textbf{Wrong Caching Strategy}:
 		\\*
 		Falsche Objekte werden in Cache abgelegt
 \end{items}
 
 \begin{fragen}
-	\begin{enumeration}
-		\item Erläutern Sie die Dimensionen des Raums der Möglichkeiten des Zugriffs auf Datenbanken aus Anwendungen heraus.
-		\item Erläutern Sie die Begriffe
-		\begin{enumeration}
-			\item Anwendungslogik,
-			\item Cursor,
-			\item Call-Level Interface,
-			\item Host-Variablen.
-		\end{enumeration}
-		\item Kann man mit Embedded SQL sicherstellen, dass keine Schema-spezifischen Fehler auftreten? Wenn ja, wie geht es?
-		\item Was sind die Vorteile von Stored Procedures? Erläutern Sie das Konzept.
-	\end{enumeration}
+	\item Erläutern Sie die Dimensionen des Raums der Möglichkeiten des Zugriffs auf Datenbanken aus Anwendungen heraus.
+	\item Erläutern Sie die Begriffe \\*
+		- Anwendungslogik, \\*
+		- Cursor, \\*
+		- Call-Level Interface, \\*
+		- Host-Variablen.
+	\item Kann man mit Embedded SQL sicherstellen, dass keine Schema-spezifischen Fehler auftreten? Wenn ja, wie geht es?
+	\item Was sind die Vorteile von Stored Procedures? Erläutern Sie das Konzept.
 \end{fragen}
