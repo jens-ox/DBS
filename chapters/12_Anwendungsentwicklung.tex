@@ -2,42 +2,42 @@
 \label{sec:anwendungeentwicklung}
 
 \paragraph{Client-Server-Architektur}
-\begin{figure}[H]\centering\label{ClientServer}\includegraphics[width=0.25\textwidth]{ClientServer}\end{figure}
-\begin{items}
+\begin{figure}[H]\centering\label{ClientServer}\includegraphics[width=0.4\linewidth]{ClientServer}\end{figure}
+\begin{itemize}
 	\item Erfordert \\*
 		- Kenntnis über angebotene Dienste \\*
 		- Protokoll zur Regelung der Interaktion
-\end{items}
+\end{itemize}
 
 \paragraph{Zwei Schichten-Architektur}
-\begin{figure}[H]\centering\label{ZweiSchichtenArchitektur}\includegraphics[width=0.33\textwidth]{ZweiSchichtenArchitektur}\end{figure}
+\begin{figure}[H]\centering\label{ZweiSchichtenArchitektur}\includegraphics[width=0.4\linewidth]{ZweiSchichtenArchitektur}\end{figure}
 
 \paragraph{Drei Schichten-Architektur}
-\begin{figure}[H]\centering\label{DreiSchichtenArchitektur}\includegraphics[width=0.33\textwidth]{DreiSchichtenArchitektur}\end{figure}
+\begin{figure}[H]\centering\label{DreiSchichtenArchitektur}\includegraphics[width=0.4\linewidth]{DreiSchichtenArchitektur}\end{figure}
 
 \paragraph{Anwendungslogik}
-\begin{items}
+\begin{itemize}
 	\item \textbf{Anwendungslogik}: Algorithmen, die anwendungsspezifisches Wissen beinhalten
 	\item Personal-DB entählt Mitarbeiter-Daten
 		\\*
 		\( \leadsto \) Anwendung: schlägt Teamleiter für konkrete Projekte vor
 		\\*
 		\( \leadsto \) Bedeutsamkeit der Fähigkeiten usw. Anwendungsteil
-\end{items}
+\end{itemize}
 
 \paragraph{Cursor-Konzept}
-\begin{items}
+\begin{itemize}
 	\item Cursor \( \equiv \) Iterator
 	\item Programmiersprachen: einzelne Datenobjekte als zugrundeliegende Struktur
-\end{items}
+\end{itemize}
 
 
 
 \paragraph{Programmiersprachenanbindung}
-\begin{figure}[H]\centering\label{Programmiersprachenanbindung}\includegraphics[width=0.33\textwidth]{Programmiersprachenanbindung}\end{figure}
+\begin{figure}[H]\centering\label{Programmiersprachenanbindung}\includegraphics[width=0.4\linewidth]{Programmiersprachenanbindung}\end{figure}
 
 \paragraph{Prepared Statements}
-\begin{items}
+\begin{itemize}
 	\item Reduzieren Ausführungszeit, da bereits vorab kompiliert
 	\item
 		\begin{lstlisting}[language=java,showstringspaces=false]
@@ -46,23 +46,23 @@ PreparedStatement updateSales =
   SET SALES = ? WHERE COF_NAME LIKE ?');
 		\end{lstlisting}
 	\item \lstinline[language=java]{upcdateSales.setInt(1,75);}
-\end{items}
+\end{itemize}
 
 \paragraph{Gespeicherte Prozeduren}
-\begin{items}
+\begin{itemize}
 	\item In DB-Server verwaltete und ausgeführte Software-Module in Form von Prozeduren/Funktionen
 	\item Aufruf aus Anwendungen/Anfragen heraus
 	\item \( \leadsto \) Weniger Kontextwechsel in Anwendung
-\end{items}
+\end{itemize}
 
 \paragraph{Variablen und Typen}
-\begin{items}
+\begin{itemize}
 	\item \lstinline[language=sql]{DECLARE preis NUMBER;}
 	\item Stellt sicher, dass Attributtyp in DB identisch zu Typ in Programm ist
-\end{items}
+\end{itemize}
 
 \paragraph{Kontrollfluss}
-\begin{items}
+\begin{itemize}
 	\item
 	\begin{lstlisting}[language=sql]
 DECLARE
@@ -80,10 +80,10 @@ END;
 .
 run;
 	\end{lstlisting}
-\end{items}
+\end{itemize}
 
 \paragraph{Performance Anti-Patterns}
-\begin{items}
+\begin{itemize}
 	\item \textbf{Excessive Dynamic Allocation}:
 		\\*
 		Häufige unnötige Objekterstellung/-zerstörung derselben Klasse
@@ -105,7 +105,7 @@ run;
 	\item \textbf{Wrong Caching Strategy}:
 		\\*
 		Falsche Objekte werden in Cache abgelegt
-\end{items}
+\end{itemize}
 
 \begin{fragen}
 	\item Erläutern Sie die Dimensionen des Raums der Möglichkeiten des Zugriffs auf Datenbanken aus Anwendungen heraus.

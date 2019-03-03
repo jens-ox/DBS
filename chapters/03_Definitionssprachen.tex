@@ -2,46 +2,46 @@
 \label{sec:definitionssprachen}
 
 \paragraph{Gewinnung der Konventionen}
-\begin{items}
+\begin{itemize}
 	\item Beschränkte Anwendungswelt (= Miniwelt, relevanter Weltausschnitt, Diskursbereich)
 	\item \textbf{Daten}: Modelle (gedankliche Abstraktionen) der Miniwelt
 	\item \textbf{Datenbasiskonsistenz}: Datenbasis ist bedeutungstreu, wenn ihre Elemente Modelle einer gegebenen Miniwelt sind (schärfste Konsistenzforderung)
-\end{items}
+\end{itemize}
 
 \paragraph{Datenbankentwurf --- Phasenmodell}
-\begin{figure}[H]\centering\label{Phasenmodell}\includegraphics[width=0.33\textwidth]{Phasenmodell}\end{figure}
+\begin{figure}[H]\centering\label{Phasenmodell}\includegraphics[width=.5\linewidth]{Phasenmodell}\end{figure}
 
 \paragraph{Datenbankentwurf --- Modellierung}
-\begin{items}
+\begin{itemize}
 	\item Ausschnitt der Wirklichkeit mit Schema beschreiben
 	\item Typen = Struktur der Entitäten
 	\item Welche Konsistenzbedingungen sind sinnvoll?
 	\item \textbf{Schemakonsistenz}: Einhaltung der durch Schema vorgegebenen Konsistenzbedingungen (= von DBMS überprüfbar! )
-\end{items}
+\end{itemize}
 
 \paragraph{SQL}
-\begin{items}
+\begin{itemize}
 	\item = standardisierte Sprache für DB-Zugriff (relational)
 	\item Aspekte: \\*
 		- Schemadefinition \\*
 		- Datenmanipulation (Einfügen, Löschen, Ändern) \\*
 		- Anfragen
-\end{items}
+\end{itemize}
 
 
 
 \paragraph{SQL --- SQL-DDL}
-\begin{items}
+\begin{itemize}
 	\item = \emph{SQL data definition language}
 	\item Teilbereich von SQL, der zu tun hat mit Definition von: \\*
 		- Typen \\*
 		- Wertebereichen
 		- Relationsschemata \\*
 		- Integritätsbedingungen
-\end{items}
+\end{itemize}
 
 \paragraph{SQL --- als Definitionssprache}
-\begin{items}
+\begin{itemize}
 	\item Externe Ebene: 
 		\begin{lstlisting}[language=sql]
 { create | drop } view;
@@ -55,27 +55,27 @@
 			\begin{lstlisting}[language=sql]
 { create | alter | drop } index;
 		\end{lstlisting}
-\end{items}
+\end{itemize}
 
 \paragraph{Data Dictionary}
-\begin{items}
+\begin{itemize}
 	\item Verzeichnis der vorhandenen Tabellen und Sichten
 	\item Selbst wie eine Datenbank aufgebaut
 	\item Enthält keine Anwendungsdaten, sondern Struktur-Metadaten
-\end{items}
+\end{itemize}
 
 \paragraph{SQL --- Tabelle anlegen}
-\begin{items}
+\begin{itemize}
 	\item \begin{lstlisting}[language=sql]
 create table Kuenstler
   (KID integer, NAME varchar(200), 
    LAND varchar(50) not null, JAHR integer, 
    primary key (KID))
 \end{lstlisting}
-\end{items}
+\end{itemize}
 
 \paragraph{SQL --- Wertebereiche}
-\begin{items}
+\begin{itemize}
 	\item \lstinline[language=sql]{integer} (auch \lstinline[language=sql]{int})
 	\item \lstinline[language=sql]{smallint}
 	\item \lstinline[language=sql]{float(p)} (auch \lstinline[language=sql]{float})
@@ -84,10 +84,10 @@ create table Kuenstler
 	\item \lstinline[language=sql]{character varying(n)} (auch \lstinline[language=sql]{varchar(n)}, String variabler Länge bis Maximallänge \( n \))
 	\item \lstinline[language=sql]{bit(n)} (oder \lstinline[language=sql]{varying(n)} analog für Bitfolgen)
 	\item \lstinline[language=sql]{date}, \lstinline[language=sql]{time}, \lstinline[language=sql]{timestamp}
-\end{items}
+\end{itemize}
 
 \paragraph{Wertebereiche --- Custom}
-\begin{items}
+\begin{itemize}
 	\item \begin{lstlisting}[language=sql]
 create domain Gebiete varchar(20)
   default 'Informatik'
@@ -97,10 +97,10 @@ create table Vorlesungen
   (Bezeichnung varchar(80) not null, SWS smallint,
    Semester smallint, Studiengang Gebiete)
 \end{lstlisting}
-\end{items}
+\end{itemize}
 
 \paragraph{Integritätsbedingungen}
-\begin{items}
+\begin{itemize}
 	\item Schlüssel kann aus mehreren Attributen bestehen
 	\item \textbf{Fremdschlüssel}: \begin{lstlisting}[language=sql]
 create table Titel
@@ -116,12 +116,12 @@ create table Vorlesungen
    Semester smallint, check(Semester between 1 and 9), 
    Studiengang Gebiete)
 \end{lstlisting}
-\end{items}
+\end{itemize}
 
 
 
 \paragraph{SQL --- alter und drop}
-\begin{items}
+\begin{itemize}
 	\item \begin{lstlisting}[language=sql]
 alter table Lehrstuehle
   add Budget decimal(8,2)
@@ -135,13 +135,13 @@ drop table basisrelationenname { restrict | cascade }
 \item \( \leadsto \) Attribut / Tabelle löschen, dabei gilt: \\*
 	- \lstinline[language=sql]{restrict}: keine Sichten/Integritätsbedingungen mit diesem Attribut definiert wurden \\*
 	- \lstinline[language=sql]{cascade}: gleichzeitig diese Schichten/Integritätsbedingungen mitgelöscht werden sollen
-\end{items}
+\end{itemize}
 
 \paragraph{Speicherhierarchie}
 \begin{figure}[H]\centering\label{Speicherhierarchie}\includegraphics[width=0.33\textwidth]{Speicherhierarchie}\end{figure}
 
 \paragraph{Index}
-\begin{items}
+\begin{itemize}
 	\item Für mehrere Attribute möglich
 	\item Index für (gpa, name) \( \neq \) Index für (name, gpa)
 	\item Index kann nachträglich angelegt bzw. gelöscht werden, ohne Daten selbst zu löschen
@@ -149,7 +149,7 @@ drop table basisrelationenname { restrict | cascade }
 	\item \lstinline[language=sql]{select name from Student where gpa > 4} liefert Ergebnis unabhängig von Existenz eines Index --- wenn vorhanden erhebliche Beschleunigung
 	\item \lstinline[language=sql]{create [unique] index typ on auto(hersteller, modell, baujahr)} \\* hilft bei Herstellersuche, weniger bei Suche nach Baujahr
 	\item Unique Index zur Simulation von Schlüsselbedingungen
-\end{items}
+\end{itemize}
 \begin{figure}[H]\centering\label{Index}\includegraphics[width=0.33\textwidth]{Index}\end{figure}
 
 \begin{fragen}

@@ -2,17 +2,17 @@
 \label{sec:parallel}
 
 \paragraph{Transaktion}
-\begin{items}
+\begin{itemize}
 	\item Partiell geordnete Folge von Lese- und Schreibzugriffen auf Datenobjekte (mit Commit oder Abort am Ende)
 	\item \textbf{ACID Eigenschaften:}
 	\item Atomicity: Entweder alles oder gar nichts ausführen
 	\item Consistency: Integritätsbedingungen bleiben erhalten
 	\item Isolation: Nutzer hat Eindruck, er wäre alleine
 	\item Durability: Änderungen sollen dauerhaft sein
-\end{items}
+\end{itemize}
 
 \paragraph{Synchronisation}
-\begin{items}
+\begin{itemize}
 	\item Viele Nutzer sollen Daten gleichzeitig lesen und schreiben können
 		\\*
 		\( \leadsto \) Konsistenz sicherstellen \( \leadsto \) \emph{Synchronisationskomponente}
@@ -21,10 +21,10 @@
 		+ Konsistenz immer gewährleistet 
 		\\*
 		$-$ extreme Wartezeiten, schlechte Ressourcenausnutzung
-\end{items}
+\end{itemize}
 
 \paragraph{Unkontrollierte nicht-serielle Ausführung: Probleme}
-\begin{items}
+\begin{itemize}
 	\item \emph{Lost Update}\\
 		 Programm \( T_1 \) transferiert 300 EUR von Konto \( A \) nach \( B \),
 		\\*
@@ -46,35 +46,35 @@
 	
 	\item \emph{Phantom}\\
 		Berechnung von Änderung auf veralteten Werten
-\end{items}
+\end{itemize}
 
 \paragraph{Konflikt}
-\begin{items}
+\begin{itemize}
 	\item Zwei Operationen \( p, q \) konfligieren
 		\\*
 		\( \Leftrightarrow \) \( p,q \) greifen auf selbes Datenobjekt zu und \( p \) oder \( q \) ist Schreiboperation
 	\item In einer Transaktion müssen konfligierende Operationen \emph{geordnet sein} (andere nicht zwingend)
-\end{items}
+\end{itemize}
 
 \paragraph{Histories}
-\begin{items}
+\begin{itemize}
 	\item \textbf{Vollständige Historie}: Menge von Transaktionen und Ausführungsordnung (nebenläufige Verzahnung, Ordnung konfligierender Operationen zwischen Transaktionen)
 	\item \textbf{Historie}: Präfix einer vollständigen Historie
 	\item \textbf{Commited Projection} (\( C(H) \)): H nach Entfernen aller nicht-committeten Operationen
 	\item Eine Eigenschaft von Histories ist \emph{prefix commit closed}
 		\\*
 		\( \Leftrightarrow \) (\( H \) erfüllt Eigenschaft \( \Rightarrow C(H') \) erfüllt Eigenschaft)
-\end{items}
+\end{itemize}
 
 \paragraph{Konfliktäquivalenz (CSR)}
-\begin{items}
+\begin{itemize}
 	\item \( H, H' \) (Konflikt-)Äquivalent, wenn \\*
 		- gleiche Transaktionen, gleiche Operationen \\*
 		- gleiche Ordnung konfligierender Operationen (gleiche Konfliktrelation)
-\end{items}
+\end{itemize}
 
 \paragraph{Serialisierbarkeit}
-\begin{items}
+\begin{itemize}
 	\item \( H \) serialisierbar \( \Leftrightarrow C(H) \equiv H_S \) (serielle History)
 	\item \textbf{Serialisierbarkeitsgraph} (Abhängigkeitsgraph):
 		\\*
@@ -86,17 +86,17 @@
 	\item \emph{Ansatz nicht praktikabel}: \\*
 		- Serialisierbarkeit nur im Nachhinein überprüfbar \\*
 		- Administrativer Overhead zu hoch: Abhängigkeiten zu bereits terminierten Transaktionen berücksichtigen
-\end{items}
+\end{itemize}
 
 \paragraph{Rücksetzbarkeitsklassen}
-\begin{items}
+\begin{itemize}
 	\item \textbf{Rücksetzbar (RC)}: Commit für $T_j$ erst erlaubt, wenn alle $T_i$ von denen $T_j$ liest, committed sind (Abort darf Semantik von bereits committeten Transaktionen nicht verändern).
 	\item \textbf{Avoid cascading aborts (ACA)}: Nur Objekte von bereits committeten Transaktionen lesen.
 	\item \textbf{Striktheit (ST)}: Objekte von noch nicht committeten Transaktionen dürfen weder gelesen noch überschrieben werden (ermöglicht einfache Implementierung des Rücksetzens)
-\end{items}
+\end{itemize}
 
 \paragraph{Locking}
-\begin{items}
+\begin{itemize}
 	\item Lock für jedes Datenobjekt und jede Operationsart
 		\\*
 		Notation: \( rl_i[x] \), \( wl_i[x] \)
@@ -125,7 +125,7 @@
 	
 	\item \emph{Aber:} Jede Einschränkung schränkt auch die Zahl der möglichen Histories ein und verringert damit den möglichen Grad der Parallelität!
 	
-\end{items}
+\end{itemize}
 
 \begin{fragen}
 	\item Was ist Isolation? Was ist der Zusammenhang zwischen Isolation und Serialisierbarkeit?

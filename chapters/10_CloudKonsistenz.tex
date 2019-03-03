@@ -2,7 +2,7 @@
 \label{sec:cloudkonsistenz}
 
 \paragraph{Verteilung}
-\begin{items}
+\begin{itemize}
 	\item \textbf{Vorteile} (scheinbar): \\*
 		+ Leselastverteilung \\*
 		+ Beschleunigung (durch höhere Lokalität) \\*
@@ -13,18 +13,18 @@
 		- Für Konsistenz müssen alle Knoten verfügbar sein \( \leadsto \) geringere Ausfallsicherheit
 	\item \( \leadsto \) Netzwerkpartitionierung
 	\item \textbf{CAP-Theorem}: Wenn Netzwerkpartitionierung möglich, dann sind hohe Verfügbarkeit und Datenbestandskonsistenz unvereinbar
-\end{items}
+\end{itemize}
 
 \paragraph{Eventual Consistency}
-\begin{items}
+\begin{itemize}
 	\item ``Wenn ab Zeitpunkt keine Änderungen mehr, dann werden irgendwann alle Lesezugriffe gleichen Wert zurückliefern''
 	\item Alternativ: ``\dots dann werden irgendwann alle Lesezugriffe zuletzt geschriebenen Wert zurückliefern''
 	\item Beispiel (social network): Netzwerkpartition
-	\begin{items}
+	\begin{itemize}
 		\item Starke Konsistenz: Vorübergehend keine Postings möglich
 		\item Eventual Consistency: User kann Posting schreiben, Follower sehen es sobald möglich
-	\end{items}
-\end{items}
+	\end{itemize}
+\end{itemize}
 
 \begin{fragen}
 	\item Geben Sie die Probleme mit dem klassischen, starken Konsistenzbegriff im verteilten Fall wieder.

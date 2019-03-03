@@ -2,7 +2,7 @@
 \label{sec:sql}
 
 \paragraph{SQL-Kern}
-\begin{items}
+\begin{itemize}
 	\item \textbf{select} \\*
 		Projektionsliste \\*
 		Attribute, arithmetische Ausdrücke, Aggregatfunktionen \\*
@@ -19,44 +19,44 @@
 		Gruppierung für Aggregatfunktionen
 	\item \textbf{having} \\*
 		Selektionsbedingungen an Gruppen
-\end{items}
+\end{itemize}
 
 \paragraph{from --- Mehrere Relationen}
-\begin{items}
+\begin{itemize}
 	\item Bei mehr als einer Relation: \emph{Kartesisches Produkt}
 	\item Kommagetrennt oder als expliziter Operator:
 	\begin{lstlisting}[language=sql]
 select * from Kuenstler K, Titel T
 select * from Kuenstler cross join Titel
 	\end{lstlisting}
-\end{items}
+\end{itemize}
 
 \paragraph{Natürlicher Verbund}
-\begin{items}
+\begin{itemize}
 	\item Automatischer Equi-Join auf allen übereinstimmenden Spalten, diese erscheinen nur ein mal in der Ergebnisrelation
 	\begin{lstlisting}[language=sql]
 select * from Kuenstler natural join Titel
 	\end{lstlisting}
-\end{items}
+\end{itemize}
 
 \paragraph{Theta-Join}
-\begin{items}
+\begin{itemize}
 	\item Verbund über Verbundsbedingungen
 	\begin{lstlisting}[language=sql]
 select * from Kuenstler 
 	join Titel on Kuenstler.KID = Titel.KID
 	\end{lstlisting}
 	\item Beispiel: \(  \text{Auto} \bowtie_{AutoPreis > BootPreis} \text{Boot} \)
-\end{items}
+\end{itemize}
 
 \paragraph{Outer, Left, Right Join}
-\begin{items}
+\begin{itemize}
 	\item Dangling Tuples übernehmen und mit Nullwerten füllen
 	\begin{figure}[H]\centering\label{SQLJoin}\includegraphics[width=0.4\textwidth]{SQLJoin}\end{figure}
-\end{items}
+\end{itemize}
 
 \paragraph{Self-Join}
-\begin{items}
+\begin{itemize}
 	\item Kartesisches Produkt einer Tabelle mit selbst
 	\begin{lstlisting}[language=sql] 
 	select * from SNUser eins, SNUser zwei
@@ -67,12 +67,12 @@ select * from Kuenstler
 eins.Name, eins.Vorname, zwei.Name, zwei.Vorname
 	\end{lstlisting}
 	\item Anwendungen: Vergleichen oder Zählen von Wertemengen
-\end{items}
+\end{itemize}
 
 
 
 \paragraph{where}
-\begin{items}
+\begin{itemize}
 	\item Konstanten-Selektion: \\*
 	\lstinline[language=sql]{select * from Buecher where Buecher.Titel = "Titel"}
 	\item Verbundbedingung bei Cross-Join (Attribut-Selektion):
@@ -86,10 +86,10 @@ select Buecher.Titel, Buecher_Stichwort.Stichwort
 	'\%' --- Beliebig viele Zeichen $\qquad$ '\_' --- Genau ein Zeichen
 	\item \lstinline[language=sql]{and, or, not, is null}
 	\item \lstinline[language=sql]{in}: \lstinline[language=sql]{where ISBN in (select ISBN from Empfiehlt)}
-\end{items}
+\end{itemize}
 
 \paragraph{Verzahnt geschachtelte Anfragen}
-\begin{items}
+\begin{itemize}
 	\item In der inneren Anfrage Attribute aus der äußeren verwenden
 	\begin{lstlisting}[language=sql]
 select Nachname from Personen
@@ -102,10 +102,10 @@ select ISBN from Buch
 where exists (select * from Ausleihe
 	where Invnr = Buch.Invnr)
 	\end{lstlisting}
-\end{items}
+\end{itemize}
 
 \paragraph{Mengenoperationen}
-\begin{items}
+\begin{itemize}
 	\item Übernimmt Attributnamen des linken Operanden
 	\item Vereinigung
 	\begin{lstlisting}[language=sql]
@@ -115,19 +115,19 @@ select A, B, C from R1 union [all]
 	\item \lstinline[language=sql]{union all}: Duplikate werden behalten
 	\item Differenz: \lstinline[language=sql]{except}
 	\item Durchschnitt: \lstinline[language=sql]{intersect}
-\end{items}
+\end{itemize}
 
 \paragraph{Aggregatfunktionen}
-\begin{items}
+\begin{itemize}
 	\item Prinzip: Berechnung eines Werts aus Werten eines Attributs\\*
 		\lstinline[language=sql]{ sum([all / distinct] Attributname) }
 	\item Standard SQL: \lstinline[language=sql]{count(), sum(), min(), max(), avg()}
 	\item Speziell: \lstinline[language=sql]{count(*)}
 	\item Modifikatoren: \lstinline[language=sql]{all / distinct} (Voreinstellung: all)
-\end{items}
+\end{itemize}
 
 \paragraph{Group by}
-\begin{items}
+\begin{itemize}
 	\item Gruppierung G: Für gleiche G-Werte werden Resttupel in Relation gesammelt, darauf dann Aggregatfunktionen angewendet
 	\item
 	\begin{lstlisting}[language=sql]
@@ -150,12 +150,12 @@ select Matrikelnr from Pruefung
 	group by Matrikelnr
 	having avg(Note) < (select avg(Note) from Pruefung)
 	\end{lstlisting}
-\end{items}
+\end{itemize}
 
 
 
 \paragraph{Quantoren}
-\begin{items}
+\begin{itemize}
 	\item \lstinline[language=sql]{any/some} (äquivalent):
 	\begin{lstlisting}[language=sql]
 select PANr, ImmaDatum
@@ -170,10 +170,10 @@ select Name from Kunde, Bestellung
 		from Bestellung group by KundeID)
 	\end{lstlisting}
 	\item Aber: Anwendbarkeit eingeschränkt, z.B. kein Vergleich auf Mengengleichheit
-\end{items}
+\end{itemize}
 
 \paragraph{order by}
-\begin{items}
+\begin{itemize}
 	\item Menge von Tupeln $\leadsto$ Sortierte Liste
 	\begin{lstlisting}[language=sql]
 select MatNr, Note from Prueft
@@ -183,18 +183,18 @@ select MatNr, Note from Prueft
 	\item Aufsteigend (\lstinline[language=sql]{asc}, Standard) oder Absteigend (\lstinline[language=sql]{desc})
 	\item \emph{Wichtig}: Sortier-Attribut(e) müssen in Select vorkommen!\\*
 	Denn: Sortierung wird auf das Ergebnis der vorherigen SFW-Anfrage angewendet.
-\end{items}
+\end{itemize}
 
 \paragraph{Nullwerte}
-\begin{items}
+\begin{itemize}
 	\item Vergleiche mit Nullwert: \lstinline[language=sql]{unknown} statt \lstinline[language=sql]{true} oder \lstinline[language=sql]{false} \\*
 	\( \leadsto A=A \) keine Tautologie!
 	\item Deshalb \emph{nicht gleich}: \lstinline[language=sql]{select * from Person} und \\* \lstinline[language=sql]{select * from Person where Name = Name}\\*
 	(Letzteres eliminiert Tupel mit Name = null)
-\end{items}
+\end{itemize}
 
 \paragraph{Änderungsoperationen}
-\begin{items}
+\begin{itemize}
 	\item \emph{Insert}
 	\begin{lstlisting}[language=sql]
 insert into relation [(attribut1, ...)]
@@ -216,7 +216,7 @@ update relation set attribut1 = wert, ...
 	\begin{lstlisting}[language=sql]
 delete from relation [where bedingung]
 	\end{lstlisting}
-\end{items}
+\end{itemize}
 
 \begin{fragen}
 	\item Formulieren diverser (komplexer) SQL-Anfragen

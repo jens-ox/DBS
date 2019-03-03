@@ -7,7 +7,7 @@
 \newcommand{\mi}{\mathrm{i}}
 
 % MORE SQUEEZED LISTS
-\newenvironment{items} 
+\newenvironment{itemize} 
   {
     \begin{itemize}[label={},leftmargin=1em,itemsep=-0.8em,itemindent=-1em]
   }
@@ -15,7 +15,7 @@
     \end{itemize}
   }
 
-\newenvironment{enumeration}
+\newenvironment{enumerate}
   {
     \begin{enumerate}[itemsep=-0.8em,leftmargin=1em]
   }
@@ -43,11 +43,11 @@
 \newenvironment{fragen}
   {
     \begin{tcolorbox}[colback=green!5!white,colframe=green!75!black,title=Prüfungsfragen,arc=0mm]
-      \begin{enumeration}
+      \begin{enumerate}
       \setlength\itemsep{0em}
   }
   {
-      \end{enumeration}
+      \end{enumerate}
     \end{tcolorbox}
   }
 

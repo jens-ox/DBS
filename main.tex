@@ -1,33 +1,33 @@
-\documentclass[aip,jmp,amsmath,amssymb,reprint,nobalancelastpage]{revtex4-1}
+\documentclass[ngerman]{latex-classes/summary}
 
-\include{assets/dependencies}
+\title{Zusammenfassung Datenbanksysteme}
+\author{Jens Ochsenmeier}
 
-\include{assets/definitions}
+% ENV -- FRAGEN
+\newenvironment{fragen}
+  {
+    \begin{tcolorbox}[colback=black!5!white,colframe=white!75!black,title=Prüfungsfragen,arc=0mm]
+      \begin{enumerate}
+      \setlength\itemsep{0em}
+  }
+  {
+      \end{enumerate}
+    \end{tcolorbox}
+  }
 
 \begin{document}
 
   \input{chapters/01_Einleitung}
-
   \input{chapters/02_Clustering}
-
   \input{chapters/03_Definitionssprachen}
-
   \input{chapters/04_Entwurf}
-
   \input{chapters/05_Formales}
-
   \input{chapters/06_Abbilden}
-
   \input{chapters/07_EntwurfRelational}
-
   \input{chapters/08_SQL}
-
   \input{chapters/09_Parallel}
-
   \input{chapters/10_CloudKonsistenz}
-
   \input{chapters/11_CloudFunktionalitaet}
-
   \input{chapters/12_Anwendungsentwicklung}
 
 \end{document}
